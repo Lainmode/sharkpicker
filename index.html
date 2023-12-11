@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/sharkpicker-0.0.1.css">
+    </head>
+    
+    <body>
+
+        <div class="sharkpicker">
+            <input id="sharkpicker-input">
+
+
+
+            <div class="am-pm-container-vertical">
+                <div class="hour-minute-block-horizontal">
+                    <input class="hour-minute-input" id="sharkpicker-h" type="text" value="12">
+                    <h1>:</h1>
+                    <input class="hour-minute-input" id="sharkpicker-m" type="text" value="0">
+                </div>
+                <div class="am-pm-block-vertical">
+                    
+                    <div class="am am-vertical am-pm am-pm-selected" data-modifier="1">AM</div>
+                    <div class="sharkpicker-vertical-line"></div>
+                    <div class="pm pm-vertical am-pm" data-modifier="2">PM</div>
+                </div>
+
+            </div>
+
+
+            <div class="clocks-container">
+                <div class="clock" data-type="hour">
+                    <div class="dot"></div>
+                    <div class="hand"></div>
+                    <div class="number number-selected" data-value="12">12</div>
+                    <div class="number" data-value="1">1</div>
+                    <div class="number" data-value="2">2</div>
+                    <div class="number" data-value="3">3</div>
+                    <div class="number" data-value="4">4</div>
+                    <div class="number" data-value="5">5</div>
+                    <div class="number" data-value="6">6</div>
+                    <div class="number" data-value="7">7</div>
+                    <div class="number" data-value="8">8</div>
+                    <div class="number" data-value="9">9</div>
+                    <div class="number" data-value="10">10</div>
+                    <div class="number" data-value="11">11</div>
+                </div>
+    
+                <div class="clock" data-type="minute">
+                    <div class="dot"></div>
+                    <div class="hand"></div>
+                    <div class="number number-selected" data-value="12">0</div>
+                    <div class="number" data-value="1">5</div>
+                    <div class="number" data-value="2">10</div>
+                    <div class="number" data-value="3">15</div>
+                    <div class="number" data-value="4">20</div>
+                    <div class="number" data-value="5">25</div>
+                    <div class="number" data-value="6">30</div>
+                    <div class="number" data-value="7">35</div>
+                    <div class="number" data-value="8">40</div>
+                    <div class="number" data-value="9">45</div>
+                    <div class="number" data-value="10">50</div>
+                    <div class="number" data-value="11">55</div>
+                </div>
+            </div>
+            
+              
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+        <script src="/sharkpicker-0.0.1.js"></script>
+
+
+        
+        <script>
+            $(document).ready(function() {
+                $(".sharkpicker").sharkPicker();
+            });
+        </script>
+    </body>
+</html>
