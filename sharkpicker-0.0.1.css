@@ -8,23 +8,12 @@ body{
 
 
 
-.sharkpicker {
-    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    border-radius:20px;
-    padding: 10px;
-    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
-}
-
-
-
-
-
 
 .clock {
     position: relative;
     width: 250px;
     height: 250px;
-    border: 1px solid  rgb(255, 220, 255);
+    border: 1px solid  #bdf4e5;
     border-radius: 50%;
     margin: 50px;
     text-align: center;
@@ -43,7 +32,7 @@ body{
     bottom: 50%;
     width: 2px;
     height: 35%;
-    background-color: magenta;
+    background-color: #20c697;
     transform-origin: 50% 100%;
     transform: rotate(0deg);
   }
@@ -54,7 +43,7 @@ body{
     bottom: 50%;
     width: 10px;
     height: 10px;
-    background-color: magenta;
+    background-color: #20c697;
     border-radius: 50%;
     transform: translate(-50%, 50%);
   }
@@ -79,7 +68,7 @@ body{
   }
 
   .am-pm-block-vertical {
-    border: 1px solid gray;
+    border: 1px solid rgba(128, 128, 128, 0.7);
     border-radius:5px;
     margin:5px;
     height: 100%;
@@ -101,11 +90,11 @@ body{
   }
 
   .sharkpicker-horizontal-line {
-    border-left: 1px solid gray;
+    border-left: 1px solid rgba(128, 128, 128, 0.7);
   }
 
   .sharkpicker-vertical-line {
-    border-top: 1px solid gray;
+    border-top: 1px solid rgba(128, 128, 128, 0.7);
   }
 
   .am-horizontal {
@@ -129,9 +118,8 @@ body{
   }
 
   .am-pm-selected {
-    background-color: rgb(255, 220, 255);
-    color:magenta;
-
+    background-color: #bdf4e5;
+    color:#20c697;
   }
 
   .hour-minute-block-horizontal {
@@ -160,15 +148,15 @@ body{
 
 
   .hour-minute-input-selected {
-    background-color: rgb(255, 220, 255);
-    color:magenta;
+    background-color: #bdf4e5;
+    color:#20c697;
     outline: none;
   }
 
 
   .hour-minute-input:focus {
-    background-color: rgb(255, 220, 255);
-    color:magenta;
+    background-color: #bdf4e5;
+    color:#20c697;
     outline: none;
   }
 
@@ -201,11 +189,11 @@ body{
     user-select: none;
     cursor:pointer;
 
-    color:magenta;
+    color:#20c697;
   }
 
   .number-selected {
-    background-color:magenta;
+    background-color:#20c697;
     color: white;
   }
 
@@ -231,7 +219,7 @@ body{
   }
 
   .sharkpicker-action-btn {
-    color:magenta;
+    color:#20c697;
     user-select: none;
     cursor: pointer;
   }
