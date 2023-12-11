@@ -223,3 +223,16 @@ body{
   .number[data-value="2"] { transform: rotate(330deg) translateX(100px) rotate(-330deg); }
 
 
+
+  .sharkpicker-actions {
+    display:flex;
+    justify-content: end;
+    align-items: center;
+  }
+
+  .sharkpicker-action-btn {
+    color:magenta;
+    user-select: none;
+    cursor: pointer;
+  }
+  

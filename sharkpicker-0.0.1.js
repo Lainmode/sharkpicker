@@ -1,13 +1,24 @@
 var dateTimeFormat = "DD/MM/YYYY HH:mm:ss";
 
 var sharkpickers = [];
+var sharkpickersUnchanged = [];
 
 $.fn.sharkPicker = function (options) {
 	options = options ?? {};
 	if (options.inputId == null) {
 		throw new Error("Please provide a valid input id");
 	}
-	return this.each(function () {
+
+	options.color = options.color ?? "#ff00ff";
+
+	var elems =
+		' <div class="sharkpicker"><input type="hidden" id="' +
+		options.inputId +
+		'" name="' +
+		options.inputId +
+		'"> <input id="sharkpicker-input" type="hidden"> <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT TIME</p> <div class="am-pm-container-vertical"> <div class="hour-minute-block-horizontal"> <input class="hour-minute-input hour-minute-input-selected" id="sharkpicker-h" type="text" value="12"> <h1 class="hour-minute-separator">:</h1> <input class="hour-minute-input" id="sharkpicker-m" type="text" value="0"> </div> <div class="am-pm-block-vertical"> <div class="am am-vertical am-pm am-pm-selected" data-modifier="1">AM</div> <div class="sharkpicker-vertical-line"></div> <div class="pm pm-vertical am-pm" data-modifier="2">PM</div> </div> </div> <div class="clocks-container"> <div class="clock" data-type="hour"> <div class="dot"></div> <div class="hand"></div> <div class="number number-selected" data-value="12">12</div> <div class="number" data-value="1">1</div> <div class="number" data-value="2">2</div> <div class="number" data-value="3">3</div> <div class="number" data-value="4">4</div> <div class="number" data-value="5">5</div> <div class="number" data-value="6">6</div> <div class="number" data-value="7">7</div> <div class="number" data-value="8">8</div> <div class="number" data-value="9">9</div> <div class="number" data-value="10">10</div> <div class="number" data-value="11">11</div> </div> <div class="clock" data-type="minute" style="display:none;"> <div class="dot"></div> <div class="hand"></div> <div class="number number-selected" data-value="12">0</div> <div class="number" data-value="1">5</div> <div class="number" data-value="2">10</div> <div class="number" data-value="3">15</div> <div class="number" data-value="4">20</div> <div class="number" data-value="5">25</div> <div class="number" data-value="6">30</div> <div class="number" data-value="7">35</div> <div class="number" data-value="8">40</div> <div class="number" data-value="9">45</div> <div class="number" data-value="10">50</div> <div class="number" data-value="11">55</div> </div> </div> <div class="sharkpicker-actions"> <h4 class="sharkpicker-discard-btn sharkpicker-action-btn" style="margin-right:20px; margin-bottom: 10px;">Discard</h4> <h4 class="sharkpicker-save-btn sharkpicker-action-btn" style="margin-right:10px;margin-bottom: 10px;">Save</h4> </div> </div>';
+
+	this.each(function () {
 		var datetime = new Date();
 		datetime.setSeconds(0);
 		if (this.dataset.shauid != null) {
@@ -19,8 +30,11 @@ $.fn.sharkPicker = function (options) {
 			return;
 		}
 
+		this.innerHTML = elems;
+
 		var $this = $(this);
-		var input = $this.find("#sharkpicker-input");
+		var initialInput = $this.find("#sharkpicker-input");
+		var input = $this.find("#" + options.inputId);
 		var hourClock = $this.find("[data-type='hour']");
 		var minuteClock = $this.find("[data-type='minute']");
 
@@ -31,6 +45,7 @@ $.fn.sharkPicker = function (options) {
 		var sharkpicker = {
 			id: id,
 			element: $this,
+			initialInput: initialInput,
 			input: input,
 			hourClock: hourClock,
 			minuteClock: minuteClock,
@@ -39,9 +54,17 @@ $.fn.sharkPicker = function (options) {
 			ampm: datetime.getHours() < 12 ? "am" : "pm",
 		};
 
+		var sharkpickerUnchanged = {
+			id: sharkpicker.id.toString(),
+			dateTimeFormat: options.dateTimeFormat.toString(),
+			ampm: sharkpicker.ampm.toString(),
+			datetime: new Date(datetime.getTime()),
+		};
+
 		this.dataset.shauid = id;
-		input.val(moment(datetime).format(dateTimeFormat));
+		initialInput.val(moment(datetime).format(dateTimeFormat));
 		sharkpickers.push(sharkpicker);
+		sharkpickersUnchanged.push(sharkpickerUnchanged);
 
 		if (sharkpicker.ampm == "pm") {
 			switchToPm(sharkpicker, true);
@@ -60,94 +83,151 @@ $.fn.sharkPicker = function (options) {
 			mn
 		);
 	});
+
+	initEvents();
 };
 
-$(".number").on("click", function (event) {
-	if (event.target.parentElement.dataset.type == "hour") {
-		pickHour(event.target.parentElement, event.target);
-	} else if (event.target.parentElement.dataset.type == "minute") {
-		pickMinute(event.target.parentElement, event.target);
-	}
-});
-
-$(".am").on("click", function (event) {
-	var sharkpicker = sharkpickers.find(
-		(e) =>
-			e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-	);
-
-	switchToAm(sharkpicker);
-});
-
-$(".pm").on("click", function (event) {
-	var sharkpicker = sharkpickers.find(
-		(e) =>
-			e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-	);
-
-	switchToPm(sharkpicker);
-});
-
-$(".hour-minute-input").on("focus", function (event) {
-	var sharkpicker = sharkpickers.find(
-		(e) =>
-			e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-	);
-
-	$(sharkpicker.element)
-		.find(".hour-minute-input-selected")
-		.removeClass("hour-minute-input-selected");
-
-	if (event.target.id == "sharkpicker-m") {
-		$(sharkpicker.element).find("[data-type='hour']").hide();
-		$(sharkpicker.element).find("[data-type='minute']").show();
-	} else if (event.target.id == "sharkpicker-h") {
-		$(sharkpicker.element).find("[data-type='minute']").hide();
-		$(sharkpicker.element).find("[data-type='hour']").show();
-	}
-
-	$(event.target).addClass("hour-minute-input-selected");
-});
-
-$(".hour-minute-input").on("change", function (event) {
-	var sharkpicker = sharkpickers.find(
-		(e) =>
-			e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-	);
-
-	if (event.target.id == "sharkpicker-m") {
-		if (event.target.value >= 60) {
-			event.target.value = 59;
-		} else if (event.target.value < 0) {
-			event.target.value = 0;
+function initEvents() {
+	$(".number").on("click", function (event) {
+		if (event.target.parentElement.dataset.type == "hour") {
+			pickHour(event.target.parentElement, event.target);
+		} else if (event.target.parentElement.dataset.type == "minute") {
+			pickMinute(event.target.parentElement, event.target);
 		}
+	});
 
-		pickMinuteRaw(sharkpicker, event.target.value);
-	} else if (event.target.id == "sharkpicker-h") {
-		if (event.target.value > 12 && event.target.value < 24) {
-			var value = event.target.value - 12;
-			sharkpicker.datetime.setHours(value);
-			event.target.value = value;
-			switchToPm(sharkpicker, true);
-		} else if (event.target.value >= 24 || event.target.value <= 0) {
-			var value = 12;
-			sharkpicker.datetime.setHours(value);
-			event.target.value = value;
-			switchToAm(sharkpicker, true);
-		} else if (event.target.value > 0 && event.target.value < 13) {
-			var value = event.target.value;
-			sharkpicker.datetime.setHours(value);
-			switchToAm(sharkpicker, true);
-		}
-
-		pickHour(
-			sharkpicker.hourClock[0],
-			$(sharkpicker.hourClock).find(
-				"[data-value='" + event.target.value + "']"
-			)[0]
+	$(".am").on("click", function (event) {
+		var sharkpicker = sharkpickers.find(
+			(e) =>
+				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
 		);
-	}
-});
+
+		switchToAm(sharkpicker);
+	});
+
+	$(".pm").on("click", function (event) {
+		var sharkpicker = sharkpickers.find(
+			(e) =>
+				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+		);
+
+		switchToPm(sharkpicker);
+	});
+
+	$(".hour-minute-input").on("focus", function (event) {
+		var sharkpicker = sharkpickers.find(
+			(e) =>
+				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+		);
+
+		$(sharkpicker.element)
+			.find(".hour-minute-input-selected")
+			.removeClass("hour-minute-input-selected");
+
+		if (event.target.id == "sharkpicker-m") {
+			$(sharkpicker.element).find("[data-type='hour']").hide();
+			$(sharkpicker.element).find("[data-type='minute']").show();
+		} else if (event.target.id == "sharkpicker-h") {
+			$(sharkpicker.element).find("[data-type='minute']").hide();
+			$(sharkpicker.element).find("[data-type='hour']").show();
+		}
+
+		$(event.target).addClass("hour-minute-input-selected");
+	});
+
+	$(".hour-minute-input").on("change", function (event) {
+		var sharkpicker = sharkpickers.find(
+			(e) =>
+				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+		);
+
+		if (event.target.id == "sharkpicker-m") {
+			if (event.target.value >= 60) {
+				event.target.value = 59;
+			} else if (event.target.value < 0) {
+				event.target.value = 0;
+			}
+
+			pickMinuteRaw(sharkpicker, event.target.value);
+		} else if (event.target.id == "sharkpicker-h") {
+			if (event.target.value > 12 && event.target.value < 24) {
+				var value = event.target.value - 12;
+				sharkpicker.datetime.setHours(value);
+				event.target.value = value;
+				switchToPm(sharkpicker, true);
+			} else if (event.target.value >= 24 || event.target.value <= 0) {
+				var value = 12;
+				sharkpicker.datetime.setHours(value);
+				event.target.value = value;
+				switchToAm(sharkpicker, true);
+			} else if (event.target.value > 0 && event.target.value < 13) {
+				var value = event.target.value;
+				sharkpicker.datetime.setHours(value);
+				switchToAm(sharkpicker, true);
+			}
+
+			pickHour(
+				sharkpicker.hourClock[0],
+				$(sharkpicker.hourClock).find(
+					"[data-value='" + event.target.value + "']"
+				)[0]
+			);
+		}
+	});
+
+	$(".sharkpicker-discard-btn").on("click", function (event) {
+		var sharkpicker = sharkpickers.find(
+			(e) =>
+				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+		);
+
+		var sharkpickerUnchanged = sharkpickersUnchanged.find(
+			(e) =>
+				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+		);
+
+		sharkpicker.datetime = new Date(sharkpickerUnchanged.datetime.getTime());
+		sharkpicker.ampm = sharkpickerUnchanged.ampm.toString();
+
+		pickMinuteRaw(sharkpicker, sharkpicker.datetime.getMinutes());
+
+		var hr = sharkpicker.datetime.getHours();
+
+		if (hr >= 12) {
+			switchToPm(sharkpicker, true);
+		} else {
+			switchToAm(sharkpicker, true);
+		}
+	});
+
+	$(".sharkpicker-save-btn").on("click", function (event) {
+		var sharkpicker = sharkpickers.find(
+			(e) =>
+				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+		);
+
+		var sharkpickerUnchanged = sharkpickersUnchanged.find(
+			(e) =>
+				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+		);
+
+		var newDateTime = new Date(sharkpicker.datetime.getTime());
+
+		if (sharkpicker.ampm == "pm" && newDateTime.getHours() < 12) {
+			newDateTime.setHours(newDateTime.getHours() + 12);
+		} else if (sharkpicker.ampm == "am" && newDateTime.getHours() == 12) {
+			newDateTime.setHours(0);
+		}
+
+		$(sharkpicker.input).val(
+			moment(newDateTime).format(sharkpicker.dateTimeFormat)
+		);
+
+		sharkpickerUnchanged.dateTimeFormat = sharkpicker.dateTimeFormat;
+		sharkpickerUnchanged.datetime = new Date(newDateTime.getTime());
+		sharkpickerUnchanged.ampm = sharkpicker.ampm.toString();
+	});
+}
 
 function pickMinuteRaw(sharkpicker, value) {
 	var mnToClosestFive = Math.round(value / 5) * 5;
@@ -283,7 +363,7 @@ function pickMinute(clockElement, element, value) {
 }
 
 function updateDateTimeInput(sharkpicker) {
-	sharkpicker.input.val(
+	sharkpicker.initialInput.val(
 		moment(sharkpicker.datetime).format(sharkpicker.dateTimeFormat)
 	);
 }
@@ -298,4 +378,12 @@ function generateUID() {
 	firstPart = ("000" + firstPart.toString(36)).slice(-3);
 	secondPart = ("000" + secondPart.toString(36)).slice(-3);
 	return firstPart + secondPart;
+}
+
+function getTextColor(hexcolor) {
+	var r = parseInt(hexcolor.substring(1, 3), 16);
+	var g = parseInt(hexcolor.substring(3, 5), 16);
+	var b = parseInt(hexcolor.substring(5, 7), 16);
+	var yiq = (r * 299 + g * 587 + b * 114) / 1000;
+	return yiq >= 128 ? "black" : "white";
 }
