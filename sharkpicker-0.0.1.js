@@ -116,24 +116,48 @@ $(".hour-minute-input").on("change", function (event) {
 	);
 
 	if (event.target.id == "sharkpicker-m") {
+		if (event.target.value >= 60) {
+			event.target.value = 59;
+		} else if (event.target.value < 0) {
+			event.target.value = 0;
+		}
+
 		pickMinuteRaw(sharkpicker, event.target.value);
 	} else if (event.target.id == "sharkpicker-h") {
+		if (event.target.value > 12 && event.target.value < 24) {
+			var value = event.target.value - 12;
+			sharkpicker.datetime.setHours(value);
+			event.target.value = value;
+			switchToPm(sharkpicker, true);
+		} else if (event.target.value >= 24 || event.target.value <= 0) {
+			var value = 12;
+			sharkpicker.datetime.setHours(value);
+			event.target.value = value;
+			switchToAm(sharkpicker, true);
+		} else if (event.target.value > 0 && event.target.value < 13) {
+			var value = event.target.value;
+			sharkpicker.datetime.setHours(value);
+			switchToAm(sharkpicker, true);
+		}
+
 		pickHour(
 			sharkpicker.hourClock[0],
 			$(sharkpicker.hourClock).find(
-				"[data-value'" + event.target.value + "']"
+				"[data-value='" + event.target.value + "']"
 			)[0]
 		);
 	}
 });
 
 function pickMinuteRaw(sharkpicker, value) {
-	var mnToClosestFive = Math.round(mn / 5) * 5;
+	var mnToClosestFive = Math.round(value / 5) * 5;
 	mnToClosestFive = mnToClosestFive == 0 ? 12 : mnToClosestFive / 5;
 
 	pickMinute(
 		sharkpicker.minuteClock[0],
-		$(sharkpicker.minuteClock).find("[data-value'" + mnToClosestFive + "']")[0],
+		$(sharkpicker.minuteClock).find(
+			"[data-value='" + mnToClosestFive + "']"
+		)[0],
 		value
 	);
 }
@@ -148,9 +172,12 @@ function switchToAm(sharkpicker, force) {
 	sharkpicker.element.find(".pm").removeClass("am-pm-selected");
 	sharkpicker.element.find(".am").addClass("am-pm-selected");
 
+	var hr = sharkpicker.datetime.getHours();
+	hr = hr > 12 ? hr - 12 : hr;
+
 	pickHour(
 		sharkpicker.hourClock[0],
-		$(sharkpicker.hourClock).find(".number-selected")[0]
+		$(sharkpicker.hourClock).find("[data-value='" + hr + "']")[0]
 	);
 
 	/* 	var numberElements = sharkpicker.element
