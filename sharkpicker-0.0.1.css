@@ -24,7 +24,7 @@ body{
     position: relative;
     width: 250px;
     height: 250px;
-    border: 1px solid gray;
+    border: 1px solid  rgb(255, 220, 255);
     border-radius: 50%;
     margin: 50px;
     text-align: center;
@@ -73,15 +73,17 @@ body{
 
   .am-pm-container-vertical {
     display: flex;
-    width: 100%;
     justify-content:center;
     text-align: center;
+    padding: 5px;
   }
 
   .am-pm-block-vertical {
     border: 1px solid gray;
     border-radius:5px;
+    margin:5px;
     height: 100%;
+    margin-left:25px;
   }
 
   .am-pm {
@@ -93,7 +95,7 @@ body{
     color:grey;
     margin-bottom: 0;
     margin-top: 0;
-    font-size:1.25rem;
+    font-size:18px;
     user-select: none;
     cursor:pointer;
   }
@@ -138,18 +140,36 @@ body{
     justify-content: center;
     padding-left: 5px;
     padding-right:5px;
-    max-width: 50%;
+  }
+
+  .hour-minute-separator {
+    margin-left:25px;
+    margin-right:25px;
   }
 
  .hour-minute-input {
     height:100%;
-    width: 25%;
-    font-size: 1.5rem;
+    width: 100px;
+    font-size: 18pt;
     text-align: center;
-    margin-left:25px;
-    margin-right:25px;
+
     border-radius: 5px;
-    border: 1px solid magenta
+    border: 0;
+    background-color:whitesmoke;
+  }
+
+
+  .hour-minute-input-selected {
+    background-color: rgb(255, 220, 255);
+    color:magenta;
+    outline: none;
+  }
+
+
+  .hour-minute-input:focus {
+    background-color: rgb(255, 220, 255);
+    color:magenta;
+    outline: none;
   }
 
 
@@ -177,7 +197,7 @@ body{
     left: 50%;
     margin-top: -20px; /* Offset by half of height */
     margin-left: -20px; /* Offset by half of width */
-    font-size:1.25rem;
+    font-size:18pt;
     user-select: none;
     cursor:pointer;
 
