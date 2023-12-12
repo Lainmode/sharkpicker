@@ -3,6 +3,9 @@ var dateTimeFormat = "DD/MM/YYYY HH:mm:ss";
 var sharkpickers = [];
 var sharkpickersUnchanged = [];
 
+var currentYear;
+var currentMonth;
+
 $.fn.sharkPicker = function (options) {
 	options = options ?? {};
 	if (options.inputId == null) {
@@ -88,145 +91,152 @@ $.fn.sharkPicker = function (options) {
 };
 
 function initEvents() {
-	$(".number").on("click", function (event) {
-		if (event.target.parentElement.dataset.type == "hour") {
-			pickHour(event.target.parentElement, event.target);
-		} else if (event.target.parentElement.dataset.type == "minute") {
-			pickMinute(event.target.parentElement, event.target);
-		}
-	});
-
-	$(".am").on("click", function (event) {
-		var sharkpicker = sharkpickers.find(
-			(e) =>
-				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-		);
-
-		switchToAm(sharkpicker);
-	});
-
-	$(".pm").on("click", function (event) {
-		var sharkpicker = sharkpickers.find(
-			(e) =>
-				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-		);
-
-		switchToPm(sharkpicker);
-	});
-
-	$(".hour-minute-input").on("focus", function (event) {
-		var sharkpicker = sharkpickers.find(
-			(e) =>
-				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-		);
-
-		$(sharkpicker.element)
-			.find(".hour-minute-input-selected")
-			.removeClass("hour-minute-input-selected");
-
-		if (event.target.id == "sharkpicker-m") {
-			$(sharkpicker.element).find("[data-type='hour']").hide();
-			$(sharkpicker.element).find("[data-type='minute']").show();
-		} else if (event.target.id == "sharkpicker-h") {
-			$(sharkpicker.element).find("[data-type='minute']").hide();
-			$(sharkpicker.element).find("[data-type='hour']").show();
-		}
-
-		$(event.target).addClass("hour-minute-input-selected");
-	});
-
-	$(".hour-minute-input").on("change", function (event) {
-		var sharkpicker = sharkpickers.find(
-			(e) =>
-				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-		);
-
-		if (event.target.id == "sharkpicker-m") {
-			if (event.target.value >= 60) {
-				event.target.value = 59;
-			} else if (event.target.value < 0) {
-				event.target.value = 0;
+	$(".number")
+		.off("click")
+		.on("click", function (event) {
+			if (event.target.parentElement.dataset.type == "hour") {
+				pickHour(event.target.parentElement, event.target);
+			} else if (event.target.parentElement.dataset.type == "minute") {
+				pickMinute(event.target.parentElement, event.target);
 			}
+		});
 
-			pickMinuteRaw(sharkpicker, event.target.value);
-		} else if (event.target.id == "sharkpicker-h") {
-			if (event.target.value > 12 && event.target.value < 24) {
-				var value = event.target.value - 12;
-				sharkpicker.datetime.setHours(value);
-				event.target.value = value;
-				switchToPm(sharkpicker, true);
-			} else if (event.target.value >= 24 || event.target.value <= 0) {
-				var value = 12;
-				sharkpicker.datetime.setHours(value);
-				event.target.value = value;
-				switchToAm(sharkpicker, true);
-			} else if (event.target.value > 0 && event.target.value < 13) {
-				var value = event.target.value;
-				sharkpicker.datetime.setHours(value);
-				switchToAm(sharkpicker, true);
-			}
+	$(".am")
+		.off("click")
+		.on("click", function (event) {
+			var sharkpicker = getSharkPickerFromElement(event.target);
 
-			pickHour(
-				sharkpicker.hourClock[0],
-				$(sharkpicker.hourClock).find(
-					"[data-value='" + event.target.value + "']"
-				)[0]
+			switchToAm(sharkpicker);
+		});
+
+	$(".pm")
+		.off("click")
+		.on("click", function (event) {
+			var sharkpicker = sharkpickers.find(
+				(e) =>
+					e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
 			);
-		}
-	});
 
-	$(".sharkpicker-discard-btn").on("click", function (event) {
-		var sharkpicker = sharkpickers.find(
-			(e) =>
-				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-		);
+			switchToPm(sharkpicker);
+		});
 
-		var sharkpickerUnchanged = sharkpickersUnchanged.find(
-			(e) =>
-				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-		);
+	$(".hour-minute-input")
+		.off("focus")
+		.on("focus", function (event) {
+			var sharkpicker = getSharkPickerFromElement(event.target);
 
-		sharkpicker.datetime = new Date(sharkpickerUnchanged.datetime.getTime());
-		sharkpicker.ampm = sharkpickerUnchanged.ampm.toString();
+			$(sharkpicker.element)
+				.find(".hour-minute-input-selected")
+				.removeClass("hour-minute-input-selected");
 
-		pickMinuteRaw(sharkpicker, sharkpicker.datetime.getMinutes());
+			if (event.target.id == "sharkpicker-m") {
+				$(sharkpicker.element).find("[data-type='hour']").hide();
+				$(sharkpicker.element).find("[data-type='minute']").show();
+			} else if (event.target.id == "sharkpicker-h") {
+				$(sharkpicker.element).find("[data-type='minute']").hide();
+				$(sharkpicker.element).find("[data-type='hour']").show();
+			}
 
-		var hr = sharkpicker.datetime.getHours();
+			$(event.target).addClass("hour-minute-input-selected");
+		});
 
-		if (hr >= 12) {
-			switchToPm(sharkpicker, true);
-		} else {
-			switchToAm(sharkpicker, true);
-		}
-	});
+	$(".hour-minute-input")
+		.off("change")
+		.on("change", function (event) {
+			var sharkpicker = getSharkPickerFromElement(event.target);
 
-	$(".sharkpicker-save-btn").on("click", function (event) {
-		var sharkpicker = sharkpickers.find(
-			(e) =>
-				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-		);
+			if (event.target.id == "sharkpicker-m") {
+				if (event.target.value >= 60) {
+					event.target.value = 59;
+				} else if (event.target.value < 0) {
+					event.target.value = 0;
+				}
 
-		var sharkpickerUnchanged = sharkpickersUnchanged.find(
-			(e) =>
-				e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-		);
+				pickMinuteRaw(sharkpicker, event.target.value);
+			} else if (event.target.id == "sharkpicker-h") {
+				if (event.target.value > 12 && event.target.value < 24) {
+					var value = event.target.value - 12;
+					sharkpicker.datetime.setHours(value);
+					event.target.value = value;
+					switchToPm(sharkpicker, true);
+				} else if (event.target.value >= 24 || event.target.value <= 0) {
+					var value = 12;
+					sharkpicker.datetime.setHours(value);
+					event.target.value = value;
+					switchToAm(sharkpicker, true);
+				} else if (event.target.value > 0 && event.target.value < 13) {
+					var value = event.target.value;
+					sharkpicker.datetime.setHours(value);
+					switchToAm(sharkpicker, true);
+				}
 
-		var newDateTime = new Date(sharkpicker.datetime.getTime());
+				pickHour(
+					sharkpicker.hourClock[0],
+					$(sharkpicker.hourClock).find(
+						"[data-value='" + event.target.value + "']"
+					)[0]
+				);
+			}
+		});
 
-		if (sharkpicker.ampm == "pm" && newDateTime.getHours() < 12) {
-			newDateTime.setHours(newDateTime.getHours() + 12);
-		} else if (sharkpicker.ampm == "am" && newDateTime.getHours() == 12) {
-			newDateTime.setHours(0);
-		}
+	$(".sharkpicker-discard-btn")
+		.off("click")
+		.on("click", function (event) {
+			var sharkpicker = getSharkPickerFromElement(event.target);
 
-		$(sharkpicker.input).val(
-			moment(newDateTime).format(sharkpicker.dateTimeFormat)
-		);
+			var sharkpickerUnchanged = sharkpickersUnchanged.find(
+				(e) =>
+					e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+			);
 
-		sharkpickerUnchanged.dateTimeFormat = sharkpicker.dateTimeFormat;
-		sharkpickerUnchanged.datetime = new Date(newDateTime.getTime());
-		sharkpickerUnchanged.ampm = sharkpicker.ampm.toString();
-	});
+			sharkpicker.datetime = new Date(sharkpickerUnchanged.datetime.getTime());
+			sharkpicker.ampm = sharkpickerUnchanged.ampm.toString();
+
+			pickMinuteRaw(sharkpicker, sharkpicker.datetime.getMinutes());
+
+			var hr = sharkpicker.datetime.getHours();
+
+			if (hr >= 12) {
+				switchToPm(sharkpicker, true);
+			} else {
+				switchToAm(sharkpicker, true);
+			}
+		});
+
+	$(".sharkpicker-save-btn")
+		.off("click")
+		.on("click", function (event) {
+			var sharkpicker = getSharkPickerFromElement(event.target);
+
+			var sharkpickerUnchanged = sharkpickersUnchanged.find(
+				(e) =>
+					e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+			);
+
+			var newDateTime = new Date(sharkpicker.datetime.getTime());
+
+			if (sharkpicker.ampm == "pm" && newDateTime.getHours() < 12) {
+				newDateTime.setHours(newDateTime.getHours() + 12);
+			} else if (sharkpicker.ampm == "am" && newDateTime.getHours() == 12) {
+				newDateTime.setHours(0);
+			}
+
+			$(sharkpicker.input).val(
+				moment(newDateTime).format(sharkpicker.dateTimeFormat)
+			);
+
+			sharkpickerUnchanged.dateTimeFormat = sharkpicker.dateTimeFormat;
+			sharkpickerUnchanged.datetime = new Date(newDateTime.getTime());
+			sharkpickerUnchanged.ampm = sharkpicker.ampm.toString();
+		});
+}
+
+function getSharkPickerFromElement(element) {
+	var sharkpicker = sharkpickers.find(
+		(e) => e.id == $(element).closest("[data-shauid]").get(0).dataset.shauid
+	);
+
+	return sharkpicker;
 }
 
 function pickMinuteRaw(sharkpicker, value) {
@@ -299,10 +309,7 @@ function switchToPm(sharkpicker, force) {
 }
 
 function pickHour(clockElement, element) {
-	var sharkpicker = sharkpickers.find(
-		(e) =>
-			e.id == $(clockElement).closest("[data-shauid]").get(0).dataset.shauid
-	);
+	var sharkpicker = getSharkPickerFromElement(clockElement);
 	/* 	var value =
 		sharkpicker.ampm == "am"
 			? element.dataset.value == 12
@@ -334,10 +341,7 @@ function pickHour(clockElement, element) {
 }
 
 function pickMinute(clockElement, element, value) {
-	var sharkpicker = sharkpickers.find(
-		(e) =>
-			e.id == $(clockElement).closest("[data-shauid]").get(0).dataset.shauid
-	);
+	var sharkpicker = getSharkPickerFromElement(clockElement);
 
 	value =
 		value ?? (element.dataset.value == 12 ? 0 : element.dataset.value * 5);
@@ -411,3 +415,78 @@ function shadeColor(color, percent) {
 
 	return "#" + RR + GG + BB;
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+	let date = new Date();
+	currentYear = date.getFullYear();
+	currentMonth = date.getMonth();
+	showCalendar(currentMonth, currentYear);
+});
+
+function showCalendar(month, year) {
+	let firstDay = new Date(year, month).getDay();
+	let daysInMonth = 32 - new Date(year, month, 32).getDate();
+
+	let tbl = $(".sharkpicker-calendarBody")[0];
+	tbl.innerHTML = "";
+
+	$(".sharkpicker-monthYear")[0].innerHTML = months[month] + " " + year;
+
+	let date = 1;
+	for (let i = 0; i < 6; i++) {
+		let row = document.createElement("tr");
+
+		for (let j = 0; j < 7; j++) {
+			if (i === 0 && j < firstDay) {
+				let cell = document.createElement("td");
+				let cellText = document.createTextNode("");
+				cell.appendChild(cellText);
+				row.appendChild(cell);
+			} else if (date > daysInMonth) {
+				break;
+			} else {
+				let cell = document.createElement("td");
+				let cellText = document.createTextNode(date);
+				if (
+					date === today.getDate() &&
+					year === today.getFullYear() &&
+					month === today.getMonth()
+				) {
+					cell.classList.add("sharkpicker-today-td");
+				}
+				cell.appendChild(cellText);
+				row.appendChild(cell);
+				date++;
+			}
+		}
+
+		tbl.appendChild(row);
+	}
+}
+
+function changeMonth(step) {
+	currentMonth += step;
+	if (currentMonth < 0 || currentMonth > 11) {
+		currentYear += currentMonth > 11 ? 1 : -1;
+		currentMonth = (currentMonth + 12) % 12;
+	}
+	showCalendar(currentMonth, currentYear);
+}
+
+function selectDay(elem) {}
+
+const months = [
+	"January",
+	"February",
+	"March",
+	"April",
+	"May",
+	"June",
+	"July",
+	"August",
+	"September",
+	"October",
+	"November",
+	"December",
+];
+const today = new Date();

@@ -1,13 +1,58 @@
 body{
     display:flex;
     justify-content: center;
-    align-items: center;
     height: 100vh;
+    margin-top:10%;
+    margin-bottom:10%;
     overflow:hidden;
 }
 
 
 
+.sharkpicker-calendar {
+  font-family: Arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+.sharkpicker-calendar td {
+  text-align: center;
+  padding: 8px;
+  margin:8px;
+  height:30px;
+  width:30px;
+  border-radius:10px;
+  user-select: none;
+  cursor: pointer;
+  border-spacing: 5px;
+}
+
+.sharkpicker-calendar td:hover {
+  background-color: #bdf4e5;
+}
+
+.sharkpicker-td-selected {
+  background-color: #20c697;
+}
+
+.sharkpicker-calendar th {
+  text-align: center;
+  padding: 8px;
+  margin:8px;
+  height:30px;
+  width:30px;
+}
+
+.sharkpicker-calendar th {
+  background-color: #f2f2f2;
+}
+
+.sharkpicker-today-td {
+  background-color:#bdf4e5;
+}
+
+.sharkpicker-monthYear {
+  font-size: 16pt;
+}
 
 .clock {
     position: relative;
