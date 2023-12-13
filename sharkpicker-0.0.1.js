@@ -205,30 +205,7 @@ function initEvents() {
 	$(".sharkpicker-discard-btn")
 		.off("click")
 		.on("click", function (event) {
-			var sharkpicker = getSharkPickerFromElement(event.currentTarget);
-
-			var sharkpickerUnchanged = sharkpickersUnchanged.find(
-				(e) =>
-					e.id == $(event.currentTarget).closest("[data-shauid]").get(0).dataset.shauid
-			);
-
-			sharkpicker.datetime = new Date(sharkpickerUnchanged.datetime.getTime());
-			sharkpicker.initialDate = new Date(sharkpicker.datetime.getTime());
-			sharkpicker.ampm = sharkpickerUnchanged.ampm.toString();
-
-			pickMinuteRaw(sharkpicker, sharkpicker.datetime.getMinutes());
-			showCalendar(sharkpicker);
-			var hr = sharkpicker.datetime.getHours();
-
-			if (hr >= 12) {
-				switchToPm(sharkpicker, true);
-			} else {
-				switchToAm(sharkpicker, true);
-			}
-			
-			if(sharkpicker.isPopup) {
-				$(sharkpicker.sharkpickerContainer).hide();
-			}
+			discardSelection(event.currentTarget);
 		});
 
 	$(".sharkpicker-save-btn")
@@ -250,6 +227,33 @@ function initEvents() {
 
 
 	});
+}
+
+function discardSelection(element) {
+	var sharkpicker = getSharkPickerFromElement(element);
+
+	var sharkpickerUnchanged = sharkpickersUnchanged.find(
+		(e) =>
+			e.id == $(element).closest("[data-shauid]").get(0).dataset.shauid
+	);
+
+	sharkpicker.datetime = new Date(sharkpickerUnchanged.datetime.getTime());
+	sharkpicker.initialDate = new Date(sharkpicker.datetime.getTime());
+	sharkpicker.ampm = sharkpickerUnchanged.ampm.toString();
+
+	pickMinuteRaw(sharkpicker, sharkpicker.datetime.getMinutes());
+	showCalendar(sharkpicker);
+	var hr = sharkpicker.datetime.getHours();
+
+	if (hr >= 12) {
+		switchToPm(sharkpicker, true);
+	} else {
+		switchToAm(sharkpicker, true);
+	}
+	
+	if(sharkpicker.isPopup) {
+		$(sharkpicker.sharkpickerContainer).hide();
+	}
 }
 
 function saveDateTime(element) {
