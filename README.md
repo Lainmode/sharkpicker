@@ -54,7 +54,6 @@ Note: SharkPicker initialization will wipe any elements inside the initializing 
 | popup      | boolean      |   Whether the SharkPicker should use its native popup behavior (not recommended (buggy)) |
 | format | string      |   The DateTime format which will be used to format the final DateTime string that will be set to the input with the ID: **inputId**. It can be anything that is recognized by **moment.js** |
 | datetime | string      |  The DateTime value in string. MUST comply with **format**. Breaks otherwise. |
-
 | showActionButtons      | boolean      |   Whether the SharkPicker should render the default **Discard** and **Save** buttons. Read below to learn how to make your own. |
 
 
