@@ -80,7 +80,7 @@ $.fn.sharkPicker = function (options) {
 
 		var sharkpickerUnchanged = {
 			id: sharkpicker.id.toString(),
-			dateTimeFormat: options.dateTimeFormat.toString(),
+			dateTimeFormat: options.format.toString(),
 			ampm: sharkpicker.ampm.toString(),
 			datetime: new Date(datetime.getTime()),
 		};
