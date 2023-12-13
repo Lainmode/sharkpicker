@@ -55,6 +55,12 @@ $.fn.sharkPicker = function (options) {
 			});	
 		}
 
+		input.css("user-select", "none");
+		input.css("cursor", "pointer");
+		input.attr("readonly", "readonly");
+
+
+
 
 		var id = generateUID();
 
