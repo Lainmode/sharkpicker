@@ -63,6 +63,7 @@ $.fn.sharkPicker = function (options) {
 		var sharkpicker = {
 			id: id,
 			element: $this,
+			sharkpickerContainer: container,
 			calendarContainer: calendarContainer,
 			initialInput: initialInput,
 			input: input,
@@ -73,6 +74,7 @@ $.fn.sharkPicker = function (options) {
 			initialDate: new Date(datetime.getTime()),
 			ampm: datetime.getHours() < 12 ? "am" : "pm",
 			yearPickerVisible: false,
+			isPopup: options.popup,
 			yearRangeModifier: 0
 		};
 
@@ -223,6 +225,10 @@ function initEvents() {
 			} else {
 				switchToAm(sharkpicker, true);
 			}
+			
+			if(sharkpicker.isPopup) {
+				$(sharkpicker.sharkpickerContainer).hide();
+			}
 		});
 
 	$(".sharkpicker-save-btn")
@@ -241,6 +247,8 @@ function initEvents() {
 			showYears(sharkpicker, sharkpicker.datetime.getFullYear());
 			showYearPicker(sharkpicker);
 		}
+
+
 	});
 }
 
@@ -267,6 +275,10 @@ function saveDateTime(element) {
 	sharkpickerUnchanged.dateTimeFormat = sharkpicker.dateTimeFormat;
 	sharkpickerUnchanged.datetime = new Date(newDateTime.getTime());
 	sharkpickerUnchanged.ampm = sharkpicker.ampm.toString();
+
+	if(sharkpicker.isPopup) {
+		$(sharkpicker.sharkpickerContainer).hide();
+	}
 }
 
 function hideYearPicker(sharkpicker) {
