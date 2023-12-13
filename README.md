@@ -56,7 +56,7 @@ Note: SharkPicker initialization will wipe any elements inside the initializing 
 
 
 ### Functional Modification:</br>
-You may employ your own **Discard** and **Save** buttons by setting **showActionButtons** to false during initialization and making your custom buttons them call **discardSelection(element)** and **saveDateTime(element)** where **element** can be the parent element used to initialize the SharkPicker or any of its child elements. You may employ your own solutions after those function calls.
+You may employ your own **Discard** and **Save** buttons by setting **showActionButtons** to false during initialization and making your custom buttons call **discardSelection(element)** and **saveDateTime(element)** where **element** can be the parent element used to initialize the SharkPicker or any of its child elements. You may employ your own solutions after those function calls.
 
 ### Style Modifications:</br>
 Currently, the only way to change the styling is by directly altering the element styles, or modifying sharkpicker.css.
