@@ -58,7 +58,7 @@ $.fn.sharkPicker = function (options) {
 
 		var id = generateUID();
 
-		options.dateTimeFormat = options.dateTimeFormat ?? dateTimeFormat;
+		options.format = options.format ?? dateTimeFormat;
 
 		var sharkpicker = {
 			id: id,
@@ -69,7 +69,7 @@ $.fn.sharkPicker = function (options) {
 			input: input,
 			hourClock: hourClock,
 			minuteClock: minuteClock,
-			dateTimeFormat: options.dateTimeFormat,
+			dateTimeFormat: options.format,
 			datetime: datetime,
 			initialDate: new Date(datetime.getTime()),
 			ampm: datetime.getHours() < 12 ? "am" : "pm",
