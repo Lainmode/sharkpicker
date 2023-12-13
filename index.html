@@ -1,19 +1,49 @@
 <!DOCTYPE html>
-<html>
+<html dir="ltr">
     <head>
         <link rel="stylesheet" href="/sharkpicker-0.0.1.css">
     </head>
     
     <body>
 
-        <div class="datetime">
 
-        </div>
 
-        <div id="sharkpicker-calendarContainer">
-            <button onclick="changeMonth(-1)">&#10094; Prev</button>
-            <button onclick="changeMonth(1)">Next &#10095;</button>
-            <h2 class="sharkpicker-monthYear"></h2>
+        <div class="sharkpicker-calendarContainer">
+            <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT DATE</p>
+            <div class="sharkpicker-controls">
+                <div class="sharkpicker-arrow" onclick="changeMonth(this, -1)">&#10094;</div>
+                <div class="sharkpicker-monthYearContainer">
+                    <h2 class="sharkpicker-monthYear sharkpicker-month"></h2>
+                    <h2 class="sharkpicker-monthYear sharkpicker-year"></h2>
+                </div>
+                <div class="sharkpicker-arrow" onclick="changeMonth(this, 1)">&#10095;</div>
+            </div>
+
+            <div class="sharkpicker-yearpicker" style="display: none;">
+                <div class="sharkpicker-yearpicker-controls">
+                    <div class="sharkpicker-arrow" onclick="changeYearsRange(this, -1)">&#10094;</div>
+                    <h4 class="sharkpicker-decade-header" style="margin-top:4px;margin-bottom:4px;text-align:center;margin-left:14px; margin-right:14px;"></h4>
+                    <div class="sharkpicker-arrow" onclick="changeYearsRange(this, 1)">&#10095;</div>
+                </div>
+                <table style="width: 100%; text-align: center;">
+                    <thead>
+                    <tr>
+                        <th>
+
+                        </th>
+                        <th>
+
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                        <div class="sharkpicker-vertical-line"></div>
+                    <tbody class="sharkpicker-yearpickerbody">
+                        
+                    </tbody>
+                </table>
+            </div>
+
             <table class="sharkpicker-calendar">
                 <thead>
                     <tr>
@@ -30,7 +60,11 @@
             </table>
         </div>
 
+        <div class="sharkpicker-horizontal-line"></div>
 
+        <div class="datetime">
+
+        </div>
 
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>

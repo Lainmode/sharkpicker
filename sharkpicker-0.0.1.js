@@ -1,10 +1,11 @@
 var dateTimeFormat = "DD/MM/YYYY HH:mm:ss";
+var date = new Date();
 
 var sharkpickers = [];
 var sharkpickersUnchanged = [];
 
-var currentYear;
-var currentMonth;
+var currentYear = date.getFullYear();
+var currentMonth = date.getMonth();
 
 $.fn.sharkPicker = function (options) {
 	options = options ?? {};
@@ -36,6 +37,7 @@ $.fn.sharkPicker = function (options) {
 		this.innerHTML = elems;
 
 		var $this = $(this);
+		var calendarContainer = $(".sharkpicker-calendarContainer");
 		var initialInput = $this.find("#sharkpicker-input");
 		var input = $this.find("#" + options.inputId);
 		var hourClock = $this.find("[data-type='hour']");
@@ -48,6 +50,7 @@ $.fn.sharkPicker = function (options) {
 		var sharkpicker = {
 			id: id,
 			element: $this,
+			calendarContainer: calendarContainer,
 			initialInput: initialInput,
 			input: input,
 			hourClock: hourClock,
@@ -55,6 +58,8 @@ $.fn.sharkPicker = function (options) {
 			dateTimeFormat: options.dateTimeFormat,
 			datetime: datetime,
 			ampm: datetime.getHours() < 12 ? "am" : "pm",
+			yearPickerVisible: false,
+			yearRangeModifier: 0
 		};
 
 		var sharkpickerUnchanged = {
@@ -79,6 +84,8 @@ $.fn.sharkPicker = function (options) {
 		var mnToClosestFive = Math.round(mn / 5) * 5;
 		mnToClosestFive = mnToClosestFive == 0 ? 12 : mnToClosestFive / 5;
 
+		showCalendar(sharkpicker);
+
 		pickHour(hourClock[0], hourClock.find("[data-value='" + hr + "']")[0]);
 		pickMinute(
 			minuteClock[0],
@@ -94,17 +101,17 @@ function initEvents() {
 	$(".number")
 		.off("click")
 		.on("click", function (event) {
-			if (event.target.parentElement.dataset.type == "hour") {
-				pickHour(event.target.parentElement, event.target);
-			} else if (event.target.parentElement.dataset.type == "minute") {
-				pickMinute(event.target.parentElement, event.target);
+			if (event.currentTarget.parentElement.dataset.type == "hour") {
+				pickHour(event.currentTarget.parentElement, event.currentTarget);
+			} else if (event.currentTarget.parentElement.dataset.type == "minute") {
+				pickMinute(event.currentTarget.parentElement, event.currentTarget);
 			}
 		});
 
 	$(".am")
 		.off("click")
 		.on("click", function (event) {
-			var sharkpicker = getSharkPickerFromElement(event.target);
+			var sharkpicker = getSharkPickerFromElement(event.currentTarget);
 
 			switchToAm(sharkpicker);
 		});
@@ -114,7 +121,7 @@ function initEvents() {
 		.on("click", function (event) {
 			var sharkpicker = sharkpickers.find(
 				(e) =>
-					e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+					e.id == $(event.currentTarget).closest("[data-shauid]").get(0).dataset.shauid
 			);
 
 			switchToPm(sharkpicker);
@@ -123,49 +130,49 @@ function initEvents() {
 	$(".hour-minute-input")
 		.off("focus")
 		.on("focus", function (event) {
-			var sharkpicker = getSharkPickerFromElement(event.target);
+			var sharkpicker = getSharkPickerFromElement(event.currentTarget);
 
 			$(sharkpicker.element)
 				.find(".hour-minute-input-selected")
 				.removeClass("hour-minute-input-selected");
 
-			if (event.target.id == "sharkpicker-m") {
+			if (event.currentTarget.id == "sharkpicker-m") {
 				$(sharkpicker.element).find("[data-type='hour']").hide();
 				$(sharkpicker.element).find("[data-type='minute']").show();
-			} else if (event.target.id == "sharkpicker-h") {
+			} else if (event.currentTarget.id == "sharkpicker-h") {
 				$(sharkpicker.element).find("[data-type='minute']").hide();
 				$(sharkpicker.element).find("[data-type='hour']").show();
 			}
 
-			$(event.target).addClass("hour-minute-input-selected");
+			$(event.currentTarget).addClass("hour-minute-input-selected");
 		});
 
 	$(".hour-minute-input")
 		.off("change")
 		.on("change", function (event) {
-			var sharkpicker = getSharkPickerFromElement(event.target);
+			var sharkpicker = getSharkPickerFromElement(event.currentTarget);
 
-			if (event.target.id == "sharkpicker-m") {
-				if (event.target.value >= 60) {
-					event.target.value = 59;
-				} else if (event.target.value < 0) {
-					event.target.value = 0;
+			if (event.currentTarget.id == "sharkpicker-m") {
+				if (event.currentTarget.value >= 60) {
+					event.currentTarget.value = 59;
+				} else if (event.currentTarget.value < 0) {
+					event.currentTarget.value = 0;
 				}
 
-				pickMinuteRaw(sharkpicker, event.target.value);
-			} else if (event.target.id == "sharkpicker-h") {
-				if (event.target.value > 12 && event.target.value < 24) {
-					var value = event.target.value - 12;
+				pickMinuteRaw(sharkpicker, event.currentTarget.value);
+			} else if (event.currentTarget.id == "sharkpicker-h") {
+				if (event.currentTarget.value > 12 && event.currentTarget.value < 24) {
+					var value = event.currentTarget.value - 12;
 					sharkpicker.datetime.setHours(value);
-					event.target.value = value;
+					event.currentTarget.value = value;
 					switchToPm(sharkpicker, true);
-				} else if (event.target.value >= 24 || event.target.value <= 0) {
+				} else if (event.currentTarget.value >= 24 || event.currentTarget.value <= 0) {
 					var value = 12;
 					sharkpicker.datetime.setHours(value);
-					event.target.value = value;
+					event.currentTarget.value = value;
 					switchToAm(sharkpicker, true);
-				} else if (event.target.value > 0 && event.target.value < 13) {
-					var value = event.target.value;
+				} else if (event.currentTarget.value > 0 && event.currentTarget.value < 13) {
+					var value = event.currentTarget.value;
 					sharkpicker.datetime.setHours(value);
 					switchToAm(sharkpicker, true);
 				}
@@ -173,7 +180,7 @@ function initEvents() {
 				pickHour(
 					sharkpicker.hourClock[0],
 					$(sharkpicker.hourClock).find(
-						"[data-value='" + event.target.value + "']"
+						"[data-value='" + event.currentTarget.value + "']"
 					)[0]
 				);
 			}
@@ -182,11 +189,11 @@ function initEvents() {
 	$(".sharkpicker-discard-btn")
 		.off("click")
 		.on("click", function (event) {
-			var sharkpicker = getSharkPickerFromElement(event.target);
+			var sharkpicker = getSharkPickerFromElement(event.currentTarget);
 
 			var sharkpickerUnchanged = sharkpickersUnchanged.find(
 				(e) =>
-					e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
+					e.id == $(event.currentTarget).closest("[data-shauid]").get(0).dataset.shauid
 			);
 
 			sharkpicker.datetime = new Date(sharkpickerUnchanged.datetime.getTime());
@@ -206,29 +213,55 @@ function initEvents() {
 	$(".sharkpicker-save-btn")
 		.off("click")
 		.on("click", function (event) {
-			var sharkpicker = getSharkPickerFromElement(event.target);
-
-			var sharkpickerUnchanged = sharkpickersUnchanged.find(
-				(e) =>
-					e.id == $(event.target).closest("[data-shauid]").get(0).dataset.shauid
-			);
-
-			var newDateTime = new Date(sharkpicker.datetime.getTime());
-
-			if (sharkpicker.ampm == "pm" && newDateTime.getHours() < 12) {
-				newDateTime.setHours(newDateTime.getHours() + 12);
-			} else if (sharkpicker.ampm == "am" && newDateTime.getHours() == 12) {
-				newDateTime.setHours(0);
-			}
-
-			$(sharkpicker.input).val(
-				moment(newDateTime).format(sharkpicker.dateTimeFormat)
-			);
-
-			sharkpickerUnchanged.dateTimeFormat = sharkpicker.dateTimeFormat;
-			sharkpickerUnchanged.datetime = new Date(newDateTime.getTime());
-			sharkpickerUnchanged.ampm = sharkpicker.ampm.toString();
+			saveDateTime(event.currentTarget);
 		});
+
+	$(".sharkpicker-year").off("click").on("click", function(event) {
+		var sharkpicker = sharkpickers[0]; // HACK
+		if(sharkpicker.yearPickerVisible) {
+			hideYearPicker(sharkpicker);
+			sharkpicker.yearRangeModifier = 0;
+		}
+		else {
+			showYears(sharkpicker, sharkpicker.datetime.getFullYear());
+			showYearPicker(sharkpicker);
+		}
+	});
+}
+
+function saveDateTime(element) {
+	var sharkpicker = getSharkPickerFromElement(event.currentTarget);
+
+	var sharkpickerUnchanged = sharkpickersUnchanged.find(
+		(e) =>
+			e.id == $(element).closest("[data-shauid]").get(0).dataset.shauid
+	);
+
+	var newDateTime = new Date(sharkpicker.datetime.getTime());
+
+	if (sharkpicker.ampm == "pm" && newDateTime.getHours() < 12) {
+		newDateTime.setHours(newDateTime.getHours() + 12);
+	} else if (sharkpicker.ampm == "am" && newDateTime.getHours() == 12) {
+		newDateTime.setHours(0);
+	}
+
+	$(sharkpicker.input).val(
+		moment(newDateTime).format(sharkpicker.dateTimeFormat)
+	);
+
+	sharkpickerUnchanged.dateTimeFormat = sharkpicker.dateTimeFormat;
+	sharkpickerUnchanged.datetime = new Date(newDateTime.getTime());
+	sharkpickerUnchanged.ampm = sharkpicker.ampm.toString();
+}
+
+function hideYearPicker(sharkpicker) {
+	$(sharkpicker.calendarContainer).find(".sharkpicker-yearpicker").hide();
+	sharkpicker.yearPickerVisible = false;
+}
+
+function showYearPicker(sharkpicker) {
+	$(sharkpicker.calendarContainer).find(".sharkpicker-yearpicker").show();
+	sharkpicker.yearPickerVisible = true;
 }
 
 function getSharkPickerFromElement(element) {
@@ -416,45 +449,53 @@ function shadeColor(color, percent) {
 	return "#" + RR + GG + BB;
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-	let date = new Date();
-	currentYear = date.getFullYear();
-	currentMonth = date.getMonth();
-	showCalendar(currentMonth, currentYear);
-});
+function showCalendar(sharkpicker) {
+	var month = sharkpicker.datetime.getMonth();
+	var year = sharkpicker.datetime.getFullYear();
 
-function showCalendar(month, year) {
-	let firstDay = new Date(year, month).getDay();
-	let daysInMonth = 32 - new Date(year, month, 32).getDate();
+	var firstDay = new Date(year, month).getDay();
+	var daysInMonth = 32 - new Date(year, month, 32).getDate();
 
-	let tbl = $(".sharkpicker-calendarBody")[0];
+	var tbl = $(sharkpicker.calendarContainer).find(".sharkpicker-calendarBody")[0];
 	tbl.innerHTML = "";
 
-	$(".sharkpicker-monthYear")[0].innerHTML = months[month] + " " + year;
+	$(sharkpicker.calendarContainer).find(".sharkpicker-month")[0].innerHTML = months[month].substring(0,3).toUpperCase();
+	$(sharkpicker.calendarContainer).find(".sharkpicker-year")[0].innerHTML = year;
 
-	let date = 1;
-	for (let i = 0; i < 6; i++) {
-		let row = document.createElement("tr");
 
-		for (let j = 0; j < 7; j++) {
+	var date = 1;
+	for (var i = 0; i < 6; i++) {
+		var row = document.createElement("tr");
+
+		for (var j = 0; j < 7; j++) {
 			if (i === 0 && j < firstDay) {
-				let cell = document.createElement("td");
-				let cellText = document.createTextNode("");
+				var cell = document.createElement("td");
+				var cellText = document.createTextNode("");
 				cell.appendChild(cellText);
 				row.appendChild(cell);
 			} else if (date > daysInMonth) {
 				break;
 			} else {
-				let cell = document.createElement("td");
-				let cellText = document.createTextNode(date);
+				var cell = document.createElement("td");
+				var cellContent = document.createElement("div");
+				var cellText = document.createTextNode(date);
 				if (
 					date === today.getDate() &&
 					year === today.getFullYear() &&
 					month === today.getMonth()
 				) {
-					cell.classList.add("sharkpicker-today-td");
+					cellContent.classList.add("sharkpicker-today");
 				}
-				cell.appendChild(cellText);
+
+				if(date == sharkpicker.datetime.getDate()) {
+					cellContent.classList.add("sharkpicker-calendar-cell-content-selected");
+				}
+				cell.classList.add("sharkpicker-day");
+				$(cell).on("click", function(event) {selectDay(event)});
+				cell.dataset.value = date;
+				cellContent.classList.add("sharkpicker-calendar-cell-content");
+				cell.appendChild(cellContent);
+				cellContent.appendChild(cellText);
 				row.appendChild(cell);
 				date++;
 			}
@@ -464,16 +505,108 @@ function showCalendar(month, year) {
 	}
 }
 
-function changeMonth(step) {
-	currentMonth += step;
-	if (currentMonth < 0 || currentMonth > 11) {
-		currentYear += currentMonth > 11 ? 1 : -1;
-		currentMonth = (currentMonth + 12) % 12;
-	}
-	showCalendar(currentMonth, currentYear);
+function showYears(sharkpicker, selectedYear) {
+    const startYear = selectedYear - (selectedYear % 10);
+    var tableBody = $(sharkpicker.calendarContainer).find(".sharkpicker-yearpickerbody")[0];
+
+    tableBody.innerHTML = '';
+    var row = document.createElement('tr');
+
+	$(sharkpicker.calendarContainer).find(".sharkpicker-decade-header").html(startYear+"s")
+
+    for (var year = startYear; year < startYear + 10; year++) {
+        var cell = document.createElement('td');
+		var cellContent = document.createElement("div");
+		cell.classList.add("sharkpicker-year-td");
+		cell.dataset.value = year;
+		cellContent.classList.add("sharkpicker-year-content");
+        cellContent.textContent = year;
+
+		$(cell).on("click", function(event) {
+			selectYear(event);
+		});
+
+		if(year == today.getFullYear()) {
+			cellContent.classList.add("sharkpicker-year-current");
+		}
+
+		if(year == sharkpicker.datetime.getFullYear()) {
+			cellContent.classList.add("sharkpicker-year-content-selected");
+
+		}
+
+		cell.appendChild(cellContent);
+        row.appendChild(cell);
+
+        if ((year - startYear) % 3 === 2) {
+            tableBody.appendChild(row);
+            row = document.createElement('tr');
+        }
+    }
+
+    if (row.hasChildNodes()) {
+        tableBody.appendChild(row);
+    }
+
 }
 
-function selectDay(elem) {}
+function changeMonth(element, step) {
+	var sharkpicker = sharkpickers[0]; // HACK
+
+	var month = sharkpicker.datetime.getMonth();
+	var year = sharkpicker.datetime.getFullYear()
+
+	sharkpicker.datetime.setMonth(month + step);
+	if (month < 0 || month > 11) {
+		sharkpicker.datetime.setYear(year += month > 11 ? 1 : -1);
+		sharkpicker.datetime.setMonth((month + 12) % 12);
+	}
+	showCalendar(sharkpicker);
+}
+
+function changeYearsRange(element, step) {
+	var sharkpicker = sharkpickers[0]; // HACK
+
+	sharkpicker.yearRangeModifier+=step;
+
+	var year = sharkpicker.datetime.getFullYear() + (sharkpicker.yearRangeModifier*10);
+	showYears(sharkpicker, year);
+}
+
+function selectDay(event) {
+	var element = event.currentTarget;
+	// var sharkpicker = getSharkPickerFromElement(event.currentTarget);
+	var sharkpicker = sharkpickers[0]; // HACK
+
+	var day = element.dataset.value;
+	sharkpicker.datetime.setDate(day);
+
+	updateDateTimeInput(sharkpicker);
+
+	$(sharkpicker.calendarContainer).find(".sharkpicker-calendar-cell-content-selected").removeClass("sharkpicker-calendar-cell-content-selected");
+	$(element).find(".sharkpicker-calendar-cell-content").addClass("sharkpicker-calendar-cell-content-selected");
+
+
+}
+
+function selectYear(event) {
+	var element = event.currentTarget;
+	// var sharkpicker = getSharkPickerFromElement(event.currentTarget);
+	var sharkpicker = sharkpickers[0]; // HACK
+
+	var year = element.dataset.value;
+	sharkpicker.datetime.setYear(year);
+
+	updateDateTimeInput(sharkpicker);
+
+	$(sharkpicker.calendarContainer).find(".sharkpicker-year-content").removeClass("sharkpicker-year-content-selected");
+	$(element).find(".sharkpicker-year-content").addClass("sharkpicker-year-content-selected");
+	$(sharkpicker.calendarContainer).find(".sharkpicker-year").html(year);
+
+	hideYearPicker(sharkpicker);
+}
+
+
 
 const months = [
 	"January",
