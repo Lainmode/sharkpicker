@@ -2,67 +2,14 @@
 <html dir="ltr">
     <head>
         <link rel="stylesheet" href="/sharkpicker-0.0.1.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
     </head>
     
     <body>
 
-
-
-        <div class="sharkpicker-calendarContainer">
-            <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT DATE</p>
-            <div class="sharkpicker-controls">
-                <div class="sharkpicker-arrow" onclick="changeMonth(this, -1)">&#10094;</div>
-                <div class="sharkpicker-monthYearContainer">
-                    <h2 class="sharkpicker-monthYear sharkpicker-month"></h2>
-                    <h2 class="sharkpicker-monthYear sharkpicker-year"></h2>
-                </div>
-                <div class="sharkpicker-arrow" onclick="changeMonth(this, 1)">&#10095;</div>
-            </div>
-
-            <div class="sharkpicker-yearpicker" style="display: none;">
-                <div class="sharkpicker-yearpicker-controls">
-                    <div class="sharkpicker-arrow" onclick="changeYearsRange(this, -1)">&#10094;</div>
-                    <h4 class="sharkpicker-decade-header" style="margin-top:4px;margin-bottom:4px;text-align:center;margin-left:14px; margin-right:14px;"></h4>
-                    <div class="sharkpicker-arrow" onclick="changeYearsRange(this, 1)">&#10095;</div>
-                </div>
-                <table style="width: 100%; text-align: center;">
-                    <thead>
-                    <tr>
-                        <th>
-
-                        </th>
-                        <th>
-
-                        </th>
-                        <th></th>
-                    </tr>
-                </thead>
-                        <div class="sharkpicker-vertical-line"></div>
-                    <tbody class="sharkpicker-yearpickerbody">
-                        
-                    </tbody>
-                </table>
-            </div>
-
-            <table class="sharkpicker-calendar">
-                <thead>
-                    <tr>
-                        <th>SUN</th>
-                        <th>MON</th>
-                        <th>TUE</th>
-                        <th>WED</th>
-                        <th>THU</th>
-                        <th>FRI</th>
-                        <th>SAT</th>
-                    </tr>
-                </thead>
-                <tbody class="sharkpicker-calendarBody"></tbody>
-            </table>
-        </div>
-
-        <div class="sharkpicker-horizontal-line"></div>
-
-        <div class="datetime">
+        <input id="DateTime">
+        <div class="datepicker">
 
         </div>
 
@@ -74,9 +21,9 @@
         
         <script>
             $(document).ready(function() {
-                $(".datetime").sharkPicker({
+                $(".datepicker").sharkPicker({
                     inputId: "DateTime",
-                    color: "#c0f0ff"
+                    popup:false,
                 });
             });
         </script>

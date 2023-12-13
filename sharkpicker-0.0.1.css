@@ -1,10 +1,67 @@
-body{
-    display:flex;
-    justify-content: center;
-    margin-top:10%;
-    margin-bottom:10%;
-    overflow:hidden;
+
+
+.sharkpicker-container {
+  position:absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: 0 auto; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+
+  background-color:rgba(0, 0, 0, 0.5);
+
 }
+.sharkpicker {
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+
+  background-color: white;
+}
+
+.sharkpicker-popup {
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 15px;
+}
+
+@media screen and (max-width: 900px) {
+  .sharkpicker-calendarContainer {
+    margin-bottom:15px;
+    border-bottom:1px solid lightgray;
+
+    
+  }
+  .sharkpicker-container {
+    align-items:start;
+    padding-top:10px;
+    padding-bottom:10px;
+    margin-right:10px;
+    margin-left:10px;
+    height:fit-content;
+
+    position:absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 0 auto; 
+    display: flex;
+    justify-content: center;
+
+  
+    background-color:rgba(0, 0, 0, 0.5);
+  }
+  .sharkpicker {
+    height: fit-content;
+    display:block;
+  }
+}
+
+
 
 
 
@@ -36,6 +93,10 @@ body{
 }
 
 .sharkpicker-calendar td:hover .sharkpicker-calendar-cell-content {
+  background-color: #bdf4e5;
+}
+
+.sharkpicker-calendar-cell-content-hover {
   background-color: #bdf4e5;
 }
 
@@ -84,6 +145,7 @@ body{
 .sharkpicker-year {
   margin-right: 25%;
   background-color: #bdf4e5;
+  
   padding-left: 12px !important;
   padding-right: 12px !important;
   border-radius:5px;
