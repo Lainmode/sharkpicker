@@ -34,7 +34,7 @@
         inputId: "DateTime", // can be anywhere in the DOM.
         popup:true, // optional, false by default.
         format: "DD/MM/YYYY HH:mm:ss", // optional, DD/MM/YYYY HH:mm:ss by default.
-        datetime: "13/12/2023 01:00:00" // optional, today by default. MUST comply with the format above.
+        datetime: "13/12/2023 01:00:00", // optional, today by default. MUST comply with the format above.
         showActionButtons: false, // optional, true by default.
       });
     });
@@ -48,13 +48,13 @@ The initializing element is where the SharkPicker will be created under. You may
 Note: SharkPicker initialization will wipe any elements inside the initializing element.
 
 
-| Property      | DataType    | Explanation  |
-| ------------- |-------------| ------------ |
-| inputId      | string | The ID of the input where the final datetime value will be set to. This input may be anywhere in the DOM. |
-| popup      | boolean      |   Whether the SharkPicker should use its native popup behavior (not recommended (buggy)) |
-| format | string      |   The DateTime format which will be used to format the final DateTime string that will be set to the input with the ID: **inputId**. It can be anything that is recognized by **moment.js** |
-| datetime | string      |  The DateTime value in string. MUST comply with **format**. Breaks otherwise. |
-| showActionButtons      | boolean      |   Whether the SharkPicker should render the default **Discard** and **Save** buttons. Read below to learn how to make your own. |
+| Property      | Optionality    | DataType | Default Value    | Explanation  |
+| ------------- |-------------| ------------ | ------------ | ------------ |
+| inputId      | string | Required | - | The ID of the input where the final datetime value will be set to. This input may be anywhere in the DOM. |
+| popup       | boolean | Optional | false  |   Whether the SharkPicker should use its native popup behavior (not recommended (buggy)) |
+| format   | string | Optional | "DD/MM/YYYY HH:mm:ss"  | The DateTime format which will be used to format the final DateTime string that will be set to the input with the ID: **inputId**. It can be anything that is recognized by **moment.js** |
+| datetime   | string | Optional   | new Date()  |  The DateTime value in string. MUST comply with **format**. Breaks otherwise. |
+| showActionButtons    | boolean   | Optional | true   |   Whether the SharkPicker should render the default **Discard** and **Save** buttons. Read below to learn how to make your own. |
 
 
 ### Functional Modification:</br>
