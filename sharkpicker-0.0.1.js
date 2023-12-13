@@ -16,6 +16,8 @@ $.fn.sharkPicker = function (options) {
 	options.popup = options.popup ?? false;
 	options.showActionButtons = options.showActionButtons ?? true;
 	options.color = options.color ?? "#ff00ff";
+	options.datetime = options.datetime ?? null;
+	options.format = options.format ?? dateTimeFormat;
 
 
 	var sharkpickerContainer = options.popup ? "sharkpicker-container" : ""; 
@@ -29,7 +31,7 @@ $.fn.sharkPicker = function (options) {
 		' <input id="sharkpicker-input" type="hidden"> <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT TIME</p> <div class="am-pm-container-vertical"> <div class="hour-minute-block-horizontal"> <input class="hour-minute-input hour-minute-input-selected" id="sharkpicker-h" type="text" value="12"> <h1 class="hour-minute-separator">:</h1> <input class="hour-minute-input" id="sharkpicker-m" type="text" value="0"> </div> <div class="am-pm-block-vertical"> <div class="am am-vertical am-pm am-pm-selected" data-modifier="1">AM</div> <div class="sharkpicker-vertical-line"></div> <div class="pm pm-vertical am-pm" data-modifier="2">PM</div> </div> </div> <div class="clocks-container"> <div class="clock" data-type="hour"> <div class="dot"></div> <div class="hand"></div> <div class="number number-selected" data-value="12">12</div> <div class="number" data-value="1">1</div> <div class="number" data-value="2">2</div> <div class="number" data-value="3">3</div> <div class="number" data-value="4">4</div> <div class="number" data-value="5">5</div> <div class="number" data-value="6">6</div> <div class="number" data-value="7">7</div> <div class="number" data-value="8">8</div> <div class="number" data-value="9">9</div> <div class="number" data-value="10">10</div> <div class="number" data-value="11">11</div> </div> <div class="clock" data-type="minute" style="display:none;"> <div class="dot"></div> <div class="hand"></div> <div class="number number-selected" data-value="12">0</div> <div class="number" data-value="1">5</div> <div class="number" data-value="2">10</div> <div class="number" data-value="3">15</div> <div class="number" data-value="4">20</div> <div class="number" data-value="5">25</div> <div class="number" data-value="6">30</div> <div class="number" data-value="7">35</div> <div class="number" data-value="8">40</div> <div class="number" data-value="9">45</div> <div class="number" data-value="10">50</div> <div class="number" data-value="11">55</div> </div> </div> <div class="sharkpicker-actions"> <h4 class="sharkpicker-discard-btn sharkpicker-action-btn" style="margin-right:20px; margin-bottom: 10px;">Discard</h4> <h4 class="sharkpicker-save-btn sharkpicker-action-btn" style="margin-right:10px;margin-bottom: 10px;">Save</h4> </div> </div>';
 
 	this.each(function () {
-		var datetime = new Date();
+		var datetime = options.datetime ? moment(options.datetime, options.format).toDate() : new Date();
 		datetime.setSeconds(0);
 		if (this.dataset.shauid != null) {
 			console.log(
@@ -66,10 +68,8 @@ $.fn.sharkPicker = function (options) {
 
 
 
-
 		var id = generateUID();
 
-		options.format = options.format ?? dateTimeFormat;
 
 		var sharkpicker = {
 			id: id,
@@ -98,6 +98,7 @@ $.fn.sharkPicker = function (options) {
 
 		this.dataset.shauid = id;
 		initialInput.val(moment(datetime).format(dateTimeFormat));
+		input.val(moment(datetime).format(dateTimeFormat));
 		sharkpickers.push(sharkpicker);
 		sharkpickersUnchanged.push(sharkpickerUnchanged);
 
@@ -108,6 +109,7 @@ $.fn.sharkPicker = function (options) {
 		var hr = sharkpicker.datetime.getHours();
 		var mn = sharkpicker.datetime.getMinutes();
 		hr = hr > 12 ? hr - 12 : hr;
+		hr = hr == 0 ? 12 : hr;
 		var mnToClosestFive = Math.round(mn / 5) * 5;
 		mnToClosestFive = mnToClosestFive == 0 ? 12 : mnToClosestFive / 5;
 
@@ -119,6 +121,7 @@ $.fn.sharkPicker = function (options) {
 			minuteClock.find("[data-value='" + mnToClosestFive + "']")[0],
 			mn
 		);
+
 	});
 
 	initEvents();
