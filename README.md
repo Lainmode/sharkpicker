@@ -33,7 +33,8 @@
       $("#parentDiv").sharkPicker({
         inputId: "DateTime", // can be anywhere in the DOM.
         popup:true, // optional, false by default.
-        format: "DD/MM/YYYY HH:mm:ss // optional, DD/MM/YYYY HH:mm:ss by default.
+        format: "DD/MM/YYYY HH:mm:ss", // optional, DD/MM/YYYY HH:mm:ss by default.
+        showActionButtons: false // optional, true by default.
       });
     });
   </script>
@@ -51,10 +52,11 @@ Note: SharkPicker initialization will wipe any elements inside the initializing 
 | inputId      | string | The ID of the input where the final datetime value will be set to. This input may be anywhere in the DOM. |
 | popup      | boolean      |   Whether the SharkPicker should use its native popup behavior (not recommended (buggy)) |
 | format | string      |   The DateTime format which will be used to format the final DateTime string that will be set to the input with the ID: **inputId**. It can be anything that is recognized by **moment.js** |
+| showActionButtons      | boolean      |   Whether the SharkPicker should render the default **Discard** and **Save** buttons. Read below to learn how to make your own. |
 
 
 ### Functional Modification:</br>
-You may employ your own **Discard** and **Save** buttons by making them call **discardSelection(element)** and **saveDateTime(element)** where **element** can be the parent element used to initialize the SharkPicker or any of its child elements. You may employ your own solutions after those function calls.
+You may employ your own **Discard** and **Save** buttons by setting **showActionButtons** to false during initialization and making your custom buttons them call **discardSelection(element)** and **saveDateTime(element)** where **element** can be the parent element used to initialize the SharkPicker or any of its child elements. You may employ your own solutions after those function calls.
 
 ### Style Modifications:</br>
 Currently, the only way to change the styling is by directly altering the element styles, or modifying sharkpicker.css.
