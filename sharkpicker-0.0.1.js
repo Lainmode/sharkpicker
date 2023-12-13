@@ -14,8 +14,9 @@ $.fn.sharkPicker = function (options) {
 	}
 
 	options.popup = options.popup ?? false;
-
+	options.showActionButtons = options.showActionButtons ?? true;
 	options.color = options.color ?? "#ff00ff";
+
 
 	var sharkpickerContainer = options.popup ? "sharkpicker-container" : ""; 
 	var sharkpickerPopup = options.popup ? "sharkpicker-popup" : ""; 
@@ -53,6 +54,10 @@ $.fn.sharkPicker = function (options) {
 			input.on("click", function() {
 				container.show();
 			});	
+		}
+
+		if(!options.showActionButtons) {
+			$this.find(".sharkpicker-actions").hide();
 		}
 
 		input.css("user-select", "none");
