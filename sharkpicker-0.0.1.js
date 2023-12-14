@@ -1,11 +1,10 @@
 var dateTimeFormat = "DD/MM/YYYY HH:mm:ss";
-var date = new Date();
+const sharkpickerToday = new Date();
 
 var sharkpickers = [];
-var sharkpickersUnchanged = [];
 
-var currentYear = date.getFullYear();
-var currentMonth = date.getMonth();
+var currentYear = sharkpickerToday.getFullYear();
+var currentMonth = sharkpickerToday.getMonth();
 
 $.fn.sharkPicker = function (options) {
 	options = options ?? {};
@@ -19,19 +18,20 @@ $.fn.sharkPicker = function (options) {
 	options.datetime = options.datetime ?? null;
 	options.format = options.format ?? dateTimeFormat;
 
-
-	var sharkpickerContainer = options.popup ? "sharkpicker-container" : ""; 
-	var sharkpickerPopup = options.popup ? "sharkpicker-popup" : ""; 
+	var sharkpickerContainer = options.popup ? "sharkpicker-container" : "";
+	var sharkpickerPopup = options.popup ? "sharkpicker-popup" : "";
 	var popupHidden = options.popup ? "style='display:none'" : "";
 
-
-	var calendar = ' <div class="sharkpicker-calendarContainer"> <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT DATE</p> <div class="sharkpicker-controls"> <div class="sharkpicker-arrow" onclick="changeMonth(this, -1)">&#10094;</div> <div class="sharkpicker-monthYearContainer"> <h2 class="sharkpicker-monthYear sharkpicker-month"></h2> <h2 class="sharkpicker-monthYear sharkpicker-year"></h2> </div> <div class="sharkpicker-arrow" onclick="changeMonth(this, 1)">&#10095;</div> </div> <div class="sharkpicker-yearpicker" style="display: none;"> <div class="sharkpicker-yearpicker-controls"> <div class="sharkpicker-arrow" onclick="changeYearsRange(this, -1)">&#10094;</div> <h4 class="sharkpicker-decade-header" style="margin-top:4px;margin-bottom:4px;text-align:center;margin-left:14px; margin-right:14px;"></h4> <div class="sharkpicker-arrow" onclick="changeYearsRange(this, 1)">&#10095;</div> </div> <table style="width: 100%; text-align: center;"> <thead> <tr> <th> </th> <th> </th> <th></th> </tr> </thead> <div class="sharkpicker-vertical-line"></div> <tbody class="sharkpicker-yearpickerbody"> </tbody> </table> </div> <table class="sharkpicker-calendar"> <thead> <tr> <th>SUN</th> <th>MON</th> <th>TUE</th> <th>WED</th> <th>THU</th> <th>FRI</th> <th>SAT</th> </tr> </thead> <tbody class="sharkpicker-calendarBody"></tbody> </table> </div> <div class="sharkpicker-horizontal-line"></div>';
+	var calendar =
+		' <div class="sharkpicker-calendarContainer"> <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT DATE</p> <div class="sharkpicker-controls"> <div class="sharkpicker-arrow" onclick="changeMonth(this, -1)">&#10094;</div> <div class="sharkpicker-monthYearContainer"> <h2 class="sharkpicker-monthYear sharkpicker-month"></h2> <h2 class="sharkpicker-monthYear sharkpicker-year"></h2> </div> <div class="sharkpicker-arrow" onclick="changeMonth(this, 1)">&#10095;</div> </div> <div class="sharkpicker-yearpicker" style="display: none;"> <div class="sharkpicker-yearpicker-controls"> <div class="sharkpicker-arrow" onclick="changeYearsRange(this, -1)">&#10094;</div> <h4 class="sharkpicker-decade-header" style="margin-top:4px;margin-bottom:4px;text-align:center;margin-left:14px; margin-right:14px;"></h4> <div class="sharkpicker-arrow" onclick="changeYearsRange(this, 1)">&#10095;</div> </div> <table style="width: 100%; text-align: center;"> <thead> <tr> <th> </th> <th> </th> <th></th> </tr> </thead> <div class="sharkpicker-vertical-line"></div> <tbody class="sharkpicker-yearpickerbody"> </tbody> </table> </div> <table class="sharkpicker-calendar"> <thead> <tr> <th>SUN</th> <th>MON</th> <th>TUE</th> <th>WED</th> <th>THU</th> <th>FRI</th> <th>SAT</th> </tr> </thead> <tbody class="sharkpicker-calendarBody"></tbody> </table> </div> <div class="sharkpicker-horizontal-line"></div>';
 
 	var clock =
 		' <input id="sharkpicker-input" type="hidden"> <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT TIME</p> <div class="am-pm-container-vertical"> <div class="hour-minute-block-horizontal"> <input class="hour-minute-input hour-minute-input-selected" id="sharkpicker-h" type="text" value="12"> <h1 class="hour-minute-separator">:</h1> <input class="hour-minute-input" id="sharkpicker-m" type="text" value="0"> </div> <div class="am-pm-block-vertical"> <div class="am am-vertical am-pm am-pm-selected" data-modifier="1">AM</div> <div class="sharkpicker-vertical-line"></div> <div class="pm pm-vertical am-pm" data-modifier="2">PM</div> </div> </div> <div class="clocks-container"> <div class="clock" data-type="hour"> <div class="dot"></div> <div class="hand"></div> <div class="number number-selected" data-value="12">12</div> <div class="number" data-value="1">1</div> <div class="number" data-value="2">2</div> <div class="number" data-value="3">3</div> <div class="number" data-value="4">4</div> <div class="number" data-value="5">5</div> <div class="number" data-value="6">6</div> <div class="number" data-value="7">7</div> <div class="number" data-value="8">8</div> <div class="number" data-value="9">9</div> <div class="number" data-value="10">10</div> <div class="number" data-value="11">11</div> </div> <div class="clock" data-type="minute" style="display:none;"> <div class="dot"></div> <div class="hand"></div> <div class="number number-selected" data-value="12">0</div> <div class="number" data-value="1">5</div> <div class="number" data-value="2">10</div> <div class="number" data-value="3">15</div> <div class="number" data-value="4">20</div> <div class="number" data-value="5">25</div> <div class="number" data-value="6">30</div> <div class="number" data-value="7">35</div> <div class="number" data-value="8">40</div> <div class="number" data-value="9">45</div> <div class="number" data-value="10">50</div> <div class="number" data-value="11">55</div> </div> </div> <div class="sharkpicker-actions"> <h4 class="sharkpicker-discard-btn sharkpicker-action-btn" style="margin-right:20px; margin-bottom: 10px;">Discard</h4> <h4 class="sharkpicker-save-btn sharkpicker-action-btn" style="margin-right:10px;margin-bottom: 10px;">Save</h4> </div> </div>';
 
 	this.each(function () {
-		var datetime = options.datetime ? moment(options.datetime, options.format).toDate() : new Date();
+		var datetime = options.datetime
+			? moment(options.datetime, options.format).toDate()
+			: new Date();
 		datetime.setSeconds(0);
 		if (this.dataset.shauid != null) {
 			console.log(
@@ -42,7 +42,18 @@ $.fn.sharkPicker = function (options) {
 			return;
 		}
 
-		this.innerHTML = '<div '+popupHidden+' class="'+sharkpickerContainer+'"><div class="sharkpicker ' + sharkpickerPopup + '">' + calendar + '<div >' + clock + '</div></div></div>';
+		this.innerHTML =
+			"<div " +
+			popupHidden +
+			' class="' +
+			sharkpickerContainer +
+			'"><div class="sharkpicker ' +
+			sharkpickerPopup +
+			'">' +
+			calendar +
+			"<div >" +
+			clock +
+			"</div></div></div>";
 
 		var $this = $(this);
 		var calendarContainer = $(".sharkpicker-calendarContainer");
@@ -52,13 +63,13 @@ $.fn.sharkPicker = function (options) {
 		var hourClock = $this.find("[data-type='hour']");
 		var minuteClock = $this.find("[data-type='minute']");
 
-		if(options.popup) {
-			input.on("click", function() {
+		if (options.popup) {
+			input.on("click", function () {
 				container.show();
-			});	
+			});
 		}
 
-		if(!options.showActionButtons) {
+		if (!options.showActionButtons) {
 			$this.find(".sharkpicker-actions").hide();
 		}
 
@@ -66,10 +77,7 @@ $.fn.sharkPicker = function (options) {
 		input.css("cursor", "pointer");
 		input.attr("readonly", "readonly");
 
-
-
 		var id = generateUID();
-
 
 		var sharkpicker = {
 			id: id,
@@ -86,21 +94,25 @@ $.fn.sharkPicker = function (options) {
 			ampm: datetime.getHours() < 12 ? "am" : "pm",
 			yearPickerVisible: false,
 			isPopup: options.popup,
-			yearRangeModifier: 0
+			yearRangeModifier: 0,
+
+			originalDateTimeFormat: options.format.toString(),
+			originalDateTime: new Date(datetime.getTime()),
+			originalAmpm: datetime.getHours() < 12 ? "am" : "pm",
 		};
 
-		var sharkpickerUnchanged = {
+		/* 		var sharkpickerUnchanged = {
 			id: sharkpicker.id.toString(),
 			dateTimeFormat: options.format.toString(),
 			ampm: sharkpicker.ampm.toString(),
 			datetime: new Date(datetime.getTime()),
-		};
+		}; */
 
 		this.dataset.shauid = id;
 		initialInput.val(moment(datetime).format(dateTimeFormat));
 		input.val(moment(datetime).format(dateTimeFormat));
 		sharkpickers.push(sharkpicker);
-		sharkpickersUnchanged.push(sharkpickerUnchanged);
+		// sharkpickersUnchanged.push(sharkpickerUnchanged);
 
 		if (sharkpicker.ampm == "pm") {
 			switchToPm(sharkpicker, true);
@@ -121,7 +133,6 @@ $.fn.sharkPicker = function (options) {
 			minuteClock.find("[data-value='" + mnToClosestFive + "']")[0],
 			mn
 		);
-
 	});
 
 	initEvents();
@@ -151,7 +162,8 @@ function initEvents() {
 		.on("click", function (event) {
 			var sharkpicker = sharkpickers.find(
 				(e) =>
-					e.id == $(event.currentTarget).closest("[data-shauid]").get(0).dataset.shauid
+					e.id ==
+					$(event.currentTarget).closest("[data-shauid]").get(0).dataset.shauid
 			);
 
 			switchToPm(sharkpicker);
@@ -196,12 +208,18 @@ function initEvents() {
 					sharkpicker.datetime.setHours(value);
 					event.currentTarget.value = value;
 					switchToPm(sharkpicker, true);
-				} else if (event.currentTarget.value >= 24 || event.currentTarget.value <= 0) {
+				} else if (
+					event.currentTarget.value >= 24 ||
+					event.currentTarget.value <= 0
+				) {
 					var value = 12;
 					sharkpicker.datetime.setHours(value);
 					event.currentTarget.value = value;
 					switchToAm(sharkpicker, true);
-				} else if (event.currentTarget.value > 0 && event.currentTarget.value < 13) {
+				} else if (
+					event.currentTarget.value > 0 &&
+					event.currentTarget.value < 13
+				) {
 					var value = event.currentTarget.value;
 					sharkpicker.datetime.setHours(value);
 					switchToAm(sharkpicker, true);
@@ -228,32 +246,26 @@ function initEvents() {
 			saveDateTime(event.currentTarget);
 		});
 
-	$(".sharkpicker-year").off("click").on("click", function(event) {
-		var sharkpicker = sharkpickers[0]; // HACK
-		if(sharkpicker.yearPickerVisible) {
-			hideYearPicker(sharkpicker);
-			sharkpicker.yearRangeModifier = 0;
-		}
-		else {
-			showYears(sharkpicker, sharkpicker.datetime.getFullYear());
-			showYearPicker(sharkpicker);
-		}
-
-
-	});
+	$(".sharkpicker-year")
+		.off("click")
+		.on("click", function (event) {
+			var sharkpicker = sharkpickers[0]; // HACK
+			if (sharkpicker.yearPickerVisible) {
+				hideYearPicker(sharkpicker);
+				sharkpicker.yearRangeModifier = 0;
+			} else {
+				showYears(sharkpicker, sharkpicker.datetime.getFullYear());
+				showYearPicker(sharkpicker);
+			}
+		});
 }
 
 function discardSelection(element) {
 	var sharkpicker = getSharkPickerFromElement(element);
 
-	var sharkpickerUnchanged = sharkpickersUnchanged.find(
-		(e) =>
-			e.id == $(element).closest("[data-shauid]").get(0).dataset.shauid
-	);
-
-	sharkpicker.datetime = new Date(sharkpickerUnchanged.datetime.getTime());
+	sharkpicker.datetime = new Date(sharkpicker.originalDateTime.getTime());
 	sharkpicker.initialDate = new Date(sharkpicker.datetime.getTime());
-	sharkpicker.ampm = sharkpickerUnchanged.ampm.toString();
+	sharkpicker.ampm = sharkpicker.originalAmpm.toString();
 
 	pickMinuteRaw(sharkpicker, sharkpicker.datetime.getMinutes());
 	showCalendar(sharkpicker);
@@ -264,19 +276,14 @@ function discardSelection(element) {
 	} else {
 		switchToAm(sharkpicker, true);
 	}
-	
-	if(sharkpicker.isPopup) {
+
+	if (sharkpicker.isPopup) {
 		$(sharkpicker.sharkpickerContainer).hide();
 	}
 }
 
 function saveDateTime(element) {
 	var sharkpicker = getSharkPickerFromElement(element);
-
-	var sharkpickerUnchanged = sharkpickersUnchanged.find(
-		(e) =>
-			e.id == $(element).closest("[data-shauid]").get(0).dataset.shauid
-	);
 
 	var newDateTime = new Date(sharkpicker.datetime.getTime());
 
@@ -290,11 +297,11 @@ function saveDateTime(element) {
 		moment(newDateTime).format(sharkpicker.dateTimeFormat)
 	);
 
-	sharkpickerUnchanged.dateTimeFormat = sharkpicker.dateTimeFormat;
-	sharkpickerUnchanged.datetime = new Date(newDateTime.getTime());
-	sharkpickerUnchanged.ampm = sharkpicker.ampm.toString();
+	sharkpicker.originalDateTimeFormat = sharkpicker.dateTimeFormat;
+	sharkpicker.originalDateTime = new Date(newDateTime.getTime());
+	sharkpicker.originalAmpm = sharkpicker.ampm.toString();
 
-	if(sharkpicker.isPopup) {
+	if (sharkpicker.isPopup) {
 		$(sharkpicker.sharkpickerContainer).hide();
 	}
 }
@@ -342,6 +349,7 @@ function switchToAm(sharkpicker, force) {
 
 	var hr = sharkpicker.datetime.getHours();
 	hr = hr > 12 ? hr - 12 : hr;
+	hr = hr == 0 ? 12 : hr;
 
 	pickHour(
 		sharkpicker.hourClock[0],
@@ -370,6 +378,7 @@ function switchToPm(sharkpicker, force) {
 
 	var hr = sharkpicker.datetime.getHours();
 	hr = hr > 12 ? hr - 12 : hr;
+	hr = hr == 0 ? 12 : hr;
 
 	pickHour(
 		sharkpicker.hourClock[0],
@@ -396,7 +405,6 @@ function pickHour(clockElement, element) {
 			: element.dataset.value == 12
 			? 12
 			: parseInt(element.dataset.value) + 12; */
-
 	var value = element.dataset.value;
 
 	sharkpicker.datetime.setHours(value);
@@ -501,12 +509,15 @@ function showCalendar(sharkpicker) {
 	var firstDay = new Date(year, month).getDay();
 	var daysInMonth = 32 - new Date(year, month, 32).getDate();
 
-	var tbl = $(sharkpicker.calendarContainer).find(".sharkpicker-calendarBody")[0];
+	var tbl = $(sharkpicker.calendarContainer).find(
+		".sharkpicker-calendarBody"
+	)[0];
 	tbl.innerHTML = "";
 
-	$(sharkpicker.calendarContainer).find(".sharkpicker-month")[0].innerHTML = months[month].substring(0,3).toUpperCase();
-	$(sharkpicker.calendarContainer).find(".sharkpicker-year")[0].innerHTML = year;
-
+	$(sharkpicker.calendarContainer).find(".sharkpicker-month")[0].innerHTML =
+		months[month].substring(0, 3).toUpperCase();
+	$(sharkpicker.calendarContainer).find(".sharkpicker-year")[0].innerHTML =
+		year;
 
 	var date = 1;
 	for (var i = 0; i < 6; i++) {
@@ -525,21 +536,28 @@ function showCalendar(sharkpicker) {
 				var cellContent = document.createElement("div");
 				var cellText = document.createTextNode(date);
 				if (
-					date === today.getDate() &&
-					year === today.getFullYear() &&
-					month === today.getMonth()
+					date === sharkpickerToday.getDate() &&
+					year === sharkpickerToday.getFullYear() &&
+					month === sharkpickerToday.getMonth()
 				) {
 					cellContent.classList.add("sharkpicker-today");
 				}
 
-				if(date == sharkpicker.datetime.getDate() && month == sharkpicker.datetime.getMonth() && year == sharkpicker.datetime.getFullYear()) {
-					cellContent.classList.add("sharkpicker-calendar-cell-content-selected");
-				}
-				else if (date == sharkpicker.datetime.getDate()) {
+				if (
+					date == sharkpicker.datetime.getDate() &&
+					month == sharkpicker.datetime.getMonth() &&
+					year == sharkpicker.datetime.getFullYear()
+				) {
+					cellContent.classList.add(
+						"sharkpicker-calendar-cell-content-selected"
+					);
+				} else if (date == sharkpicker.datetime.getDate()) {
 					cellContent.classList.add("sharkpicker-calendar-cell-content-hover");
 				}
 				cell.classList.add("sharkpicker-day");
-				$(cell).on("click", function(event) {selectDay(event.currentTarget)});
+				$(cell).on("click", function (event) {
+					selectDay(event.currentTarget);
+				});
 				cell.dataset.value = date;
 				cellContent.classList.add("sharkpicker-calendar-cell-content");
 				cell.appendChild(cellContent);
@@ -554,84 +572,85 @@ function showCalendar(sharkpicker) {
 }
 
 function showYears(sharkpicker, selectedYear) {
-    const startYear = selectedYear - (selectedYear % 10);
-    var tableBody = $(sharkpicker.calendarContainer).find(".sharkpicker-yearpickerbody")[0];
+	const startYear = selectedYear - (selectedYear % 10);
+	var tableBody = $(sharkpicker.calendarContainer).find(
+		".sharkpicker-yearpickerbody"
+	)[0];
 
-    tableBody.innerHTML = '';
-    var row = document.createElement('tr');
+	tableBody.innerHTML = "";
+	var row = document.createElement("tr");
 
-	$(sharkpicker.calendarContainer).find(".sharkpicker-decade-header").html(startYear+"s")
+	$(sharkpicker.calendarContainer)
+		.find(".sharkpicker-decade-header")
+		.html(startYear + "s");
 
-    for (var year = startYear; year < startYear + 10; year++) {
-        var cell = document.createElement('td');
+	for (var year = startYear; year < startYear + 10; year++) {
+		var cell = document.createElement("td");
 		var cellContent = document.createElement("div");
 		cell.classList.add("sharkpicker-year-td");
 		cell.dataset.value = year;
 		cellContent.classList.add("sharkpicker-year-content");
-        cellContent.textContent = year;
+		cellContent.textContent = year;
 
-		$(cell).on("click", function(event) {
+		$(cell).on("click", function (event) {
 			selectYear(event.currentTarget);
 		});
 
-		if(year == today.getFullYear()) {
+		if (year == sharkpickerToday.getFullYear()) {
 			cellContent.classList.add("sharkpicker-year-current");
 		}
 
-		if(year == sharkpicker.datetime.getFullYear()) {
+		if (year == sharkpicker.datetime.getFullYear()) {
 			cellContent.classList.add("sharkpicker-year-content-selected");
-
 		}
 
 		cell.appendChild(cellContent);
-        row.appendChild(cell);
+		row.appendChild(cell);
 
-        if ((year - startYear) % 3 === 2) {
-            tableBody.appendChild(row);
-            row = document.createElement('tr');
-        }
-    }
+		if ((year - startYear) % 3 === 2) {
+			tableBody.appendChild(row);
+			row = document.createElement("tr");
+		}
+	}
 
-    if (row.hasChildNodes()) {
-        tableBody.appendChild(row);
-    }
-
+	if (row.hasChildNodes()) {
+		tableBody.appendChild(row);
+	}
 }
 
 function changeMonth(element, step) {
 	var sharkpicker = sharkpickers[0]; // HACK
 
 	var month = sharkpicker.initialDate.getMonth();
-	var year = sharkpicker.initialDate.getFullYear()
+	var year = sharkpicker.initialDate.getFullYear();
 
 	sharkpicker.initialDate.setMonth(month + step);
 	if (month < 0 || month > 11) {
-		sharkpicker.initialDate.setYear(year += month > 11 ? 1 : -1);
+		sharkpicker.initialDate.setYear((year += month > 11 ? 1 : -1));
 		sharkpicker.initialDate.setMonth((month + 12) % 12);
 	}
 	showCalendar(sharkpicker);
 }
 
 function changeMonthWithSharkPicker(sharkpicker, step) {
-
 	var month = sharkpicker.initialDate.getMonth();
-	var year = sharkpicker.initialDate.getFullYear()
+	var year = sharkpicker.initialDate.getFullYear();
 
 	sharkpicker.initialDate.setMonth(month + step);
 	if (month < 0 || month > 11) {
-		sharkpicker.initialDate.setYear(year += month > 11 ? 1 : -1);
+		sharkpicker.initialDate.setYear((year += month > 11 ? 1 : -1));
 		sharkpicker.initialDate.setMonth((month + 12) % 12);
 	}
 	showCalendar(sharkpicker);
 }
 
-
 function changeYearsRange(element, step) {
 	var sharkpicker = sharkpickers[0]; // HACK
 
-	sharkpicker.yearRangeModifier+=step;
+	sharkpicker.yearRangeModifier += step;
 
-	var year = sharkpicker.initialDate.getFullYear() + (sharkpicker.yearRangeModifier*10);
+	var year =
+		sharkpicker.initialDate.getFullYear() + sharkpicker.yearRangeModifier * 10;
 	showYears(sharkpicker, year);
 }
 
@@ -648,10 +667,16 @@ function selectDay(element) {
 
 	updateDateTimeInput(sharkpicker);
 
-	$(sharkpicker.calendarContainer).find(".sharkpicker-calendar-cell-content-selected").removeClass("sharkpicker-calendar-cell-content-selected");
-	$(sharkpicker.calendarContainer).find(".sharkpicker-calendar-cell-content-hover").removeClass("sharkpicker-calendar-cell-content-hover");
+	$(sharkpicker.calendarContainer)
+		.find(".sharkpicker-calendar-cell-content-selected")
+		.removeClass("sharkpicker-calendar-cell-content-selected");
+	$(sharkpicker.calendarContainer)
+		.find(".sharkpicker-calendar-cell-content-hover")
+		.removeClass("sharkpicker-calendar-cell-content-hover");
 
-	$(element).find(".sharkpicker-calendar-cell-content").addClass("sharkpicker-calendar-cell-content-selected");
+	$(element)
+		.find(".sharkpicker-calendar-cell-content")
+		.addClass("sharkpicker-calendar-cell-content-selected");
 }
 
 function selectDayRaw(day) {
@@ -662,10 +687,13 @@ function selectDayRaw(day) {
 
 	updateDateTimeInput(sharkpicker);
 
-	$(sharkpicker.calendarContainer).find(".sharkpicker-calendar-cell-content-selected").removeClass("sharkpicker-calendar-cell-content-selected");
-	$(element).find(".sharkpicker-calendar-cell-content").addClass("sharkpicker-calendar-cell-content-selected");
+	$(sharkpicker.calendarContainer)
+		.find(".sharkpicker-calendar-cell-content-selected")
+		.removeClass("sharkpicker-calendar-cell-content-selected");
+	$(element)
+		.find(".sharkpicker-calendar-cell-content")
+		.addClass("sharkpicker-calendar-cell-content-selected");
 }
-
 
 function selectYear(element) {
 	// var sharkpicker = getSharkPickerFromElement(event.currentTarget);
@@ -676,8 +704,12 @@ function selectYear(element) {
 
 	updateDateTimeInput(sharkpicker);
 
-	$(sharkpicker.calendarContainer).find(".sharkpicker-year-content").removeClass("sharkpicker-year-content-selected");
-	$(element).find(".sharkpicker-year-content").addClass("sharkpicker-year-content-selected");
+	$(sharkpicker.calendarContainer)
+		.find(".sharkpicker-year-content")
+		.removeClass("sharkpicker-year-content-selected");
+	$(element)
+		.find(".sharkpicker-year-content")
+		.addClass("sharkpicker-year-content-selected");
 	$(sharkpicker.calendarContainer).find(".sharkpicker-year").html(year);
 
 	hideYearPicker(sharkpicker);
@@ -698,8 +730,6 @@ function selectYearRaw(year) {
 	hideYearPicker(sharkpicker);
 }
 
-
-
 const months = [
 	"January",
 	"February",
@@ -714,4 +744,3 @@ const months = [
 	"November",
 	"December",
 ];
-const today = new Date();
