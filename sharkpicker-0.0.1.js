@@ -249,7 +249,7 @@ function initEvents() {
 	$(".sharkpicker-year")
 		.off("click")
 		.on("click", function (event) {
-			var sharkpicker = sharkpickers[0]; // HACK
+			var sharkpicker = getSharkPickerFromElement(event.currentTarget);
 			if (sharkpicker.yearPickerVisible) {
 				hideYearPicker(sharkpicker);
 				sharkpicker.yearRangeModifier = 0;
@@ -619,7 +619,7 @@ function showYears(sharkpicker, selectedYear) {
 }
 
 function changeMonth(element, step) {
-	var sharkpicker = sharkpickers[0]; // HACK
+	var sharkpicker = getSharkPickerFromElement(element);
 
 	var month = sharkpicker.initialDate.getMonth();
 	var year = sharkpicker.initialDate.getFullYear();
@@ -645,7 +645,7 @@ function changeMonthWithSharkPicker(sharkpicker, step) {
 }
 
 function changeYearsRange(element, step) {
-	var sharkpicker = sharkpickers[0]; // HACK
+	var sharkpicker = getSharkPickerFromElement(element);
 
 	sharkpicker.yearRangeModifier += step;
 
@@ -655,8 +655,7 @@ function changeYearsRange(element, step) {
 }
 
 function selectDay(element) {
-	// var sharkpicker = getSharkPickerFromElement(event.currentTarget);
-	var sharkpicker = sharkpickers[0]; // HACK
+	var sharkpicker = getSharkPickerFromElement(element);
 
 	var day = element.dataset.value;
 	sharkpicker.datetime.setDate(day);
@@ -680,8 +679,7 @@ function selectDay(element) {
 }
 
 function selectDayRaw(day) {
-	// var sharkpicker = getSharkPickerFromElement(event.currentTarget);
-	var sharkpicker = sharkpickers[0]; // HACK
+	var sharkpicker = getSharkPickerFromElement(element);
 
 	sharkpicker.datetime.setDate(day);
 
@@ -696,8 +694,7 @@ function selectDayRaw(day) {
 }
 
 function selectYear(element) {
-	// var sharkpicker = getSharkPickerFromElement(event.currentTarget);
-	var sharkpicker = sharkpickers[0]; // HACK
+	var sharkpicker = getSharkPickerFromElement(element);
 
 	var year = element.dataset.value;
 	sharkpicker.initialDate.setYear(year);
@@ -715,19 +712,6 @@ function selectYear(element) {
 	hideYearPicker(sharkpicker);
 
 	showCalendar(sharkpicker);
-}
-
-function selectYearRaw(year) {
-	// var sharkpicker = getSharkPickerFromElement(event.currentTarget);
-	var sharkpicker = sharkpickers[0]; // HACK
-
-	sharkpicker.datetime.setYear(year);
-
-	updateDateTimeInput(sharkpicker);
-
-	$(sharkpicker.calendarContainer).find(".sharkpicker-year").html(year);
-
-	hideYearPicker(sharkpicker);
 }
 
 const months = [
