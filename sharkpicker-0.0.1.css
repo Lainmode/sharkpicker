@@ -84,6 +84,8 @@
   font-weight: bold;
   color:rgb(63, 63, 63);
 
+  box-sizing: content-box;
+
 }
 
 .sharkpicker-day {
@@ -168,6 +170,7 @@
   border-radius: 5px;
   padding: 10px;
   margin-left:195px;
+  z-index: 999;
 }
 
 .sharkpicker-arrow {
@@ -344,6 +347,8 @@
   .hour-minute-separator {
     margin-left:25px;
     margin-right:25px;
+    margin-top:auto;
+    margin-bottom:auto;
   }
 
  .hour-minute-input {
@@ -437,5 +442,6 @@
     color:#20c697;
     user-select: none;
     cursor: pointer;
+    font-size:13pt !important;
   }
   
