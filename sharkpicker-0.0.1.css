@@ -15,6 +15,14 @@
   background-color:rgba(0, 0, 0, 0.5);
 
 }
+
+.sharkpicker-dark {
+  color: white;
+  background-color: black !important
+}
+
+
+
 .sharkpicker {
   height: fit-content;
   display: flex;
@@ -88,6 +96,24 @@
 
 }
 
+.sharkpicker-dark .sharkpicker-calendar-cell-content {
+  text-align: center;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  margin:2px;
+  height:30px;
+  width:30px;
+
+  border-radius:10px;
+  font-weight: bold;
+  color:white;
+
+  box-sizing: content-box;
+
+}
+
 .sharkpicker-day {
   text-align: center;
   user-select: none;
@@ -98,8 +124,17 @@
   background-color: #bdf4e5;
 }
 
+.sharkpicker-dark .sharkpicker-calendar td:hover .sharkpicker-calendar-cell-content {
+  background-color: #bdf4e5;
+  color:black;
+}
+
 .sharkpicker-calendar-cell-content-hover {
   background-color: #bdf4e5;
+}
+
+.sharkpicker-dark .sharkpicker-calendar-cell-content-hover {
+  color:black;
 }
 
 .sharkpicker-calendar-cell-content-selected {
@@ -152,8 +187,17 @@
   padding-right: 12px !important;
   border-radius:5px;
   cursor:pointer;
-
 }
+
+.sharkpicker-dark .sharkpicker-year {
+  color:black;
+}
+
+.sharkpicker-dark .sharkpicker-year-td:hover .sharkpicker-year-content {
+  color:black;
+}
+
+
 .sharkpicker-monthYear {
   font-size: 14pt;
   text-align: center;
@@ -229,11 +273,37 @@
     background-color: whitesmoke;
   }
 
+  .sharkpicker-dark .clock {
+    color: white;
+    background-color: rgb(24, 24, 24) !important;
+    border: 1px solid  gray;
+  }
+  
+
+  .sharkpicker-dark .number:hover {
+    color: black !important;
+  }
+
+  .sharkpicker-dark .number-selected:hover {
+    color:white !important;
+  }
+
 
 .clocks-container {
     display:flex;
     justify-content: center;
 }
+
+.sharkpicker-dark .hour-minute-input {
+  background-color: rgb(24, 24, 24) !important;
+  color: white;
+}
+
+.sharkpicker-dark .hour-minute-input-selected {
+  background-color: rgb(73, 73, 73) !important;
+  color: #20c697;
+}
+
 
   .hand {
     position: absolute;
@@ -296,6 +366,20 @@
     font-size:18px;
     user-select: none;
     cursor:pointer;
+  }
+
+  .sharkpicker-dark .am-pm {
+
+    background-color: rgb(24, 24, 24) ;
+    color:white;
+
+  }
+
+  .sharkpicker-dark .am-pm-selected {
+
+    background-color: #20c697;
+    color:white;
+
   }
 
   .sharkpicker-horizontal-line {

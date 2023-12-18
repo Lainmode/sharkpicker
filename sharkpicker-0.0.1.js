@@ -17,13 +17,17 @@ $.fn.sharkPicker = function (options) {
 	options.color = options.color ?? "#ff00ff";
 	options.datetime = options.datetime ?? null;
 	options.format = options.format ?? dateTimeFormat;
+	options.darkMode = options.darkMode ?? false;
 
 	var sharkpickerContainer = options.popup ? "sharkpicker-container" : "";
 	var sharkpickerPopup = options.popup ? "sharkpicker-popup" : "";
 	var popupHidden = options.popup ? "style='display:none'" : "";
+	var theme = options.darkMode ? "sharkpicker-dark" : "";
 
 	var calendar =
-		' <div class="sharkpicker-calendarContainer"> <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT DATE</p> <div class="sharkpicker-controls"> <div class="sharkpicker-arrow" onclick="changeMonth(this, -1)">&#10094;</div> <div class="sharkpicker-monthYearContainer"> <h2 class="sharkpicker-monthYear sharkpicker-month"></h2> <h2 class="sharkpicker-monthYear sharkpicker-year"></h2> </div> <div class="sharkpicker-arrow" onclick="changeMonth(this, 1)">&#10095;</div> </div> <div class="sharkpicker-yearpicker" style="display: none;"> <div class="sharkpicker-yearpicker-controls"> <div class="sharkpicker-arrow" onclick="changeYearsRange(this, -1)">&#10094;</div> <h4 class="sharkpicker-decade-header" style="margin-top:4px;margin-bottom:4px;text-align:center;margin-left:14px; margin-right:14px;"></h4> <div class="sharkpicker-arrow" onclick="changeYearsRange(this, 1)">&#10095;</div> </div> <table style="width: 100%; text-align: center;"> <thead> <tr> <th> </th> <th> </th> <th></th> </tr> </thead> <div class="sharkpicker-vertical-line"></div> <tbody class="sharkpicker-yearpickerbody"> </tbody> </table> </div> <table class="sharkpicker-calendar"> <thead> <tr> <th>SUN</th> <th>MON</th> <th>TUE</th> <th>WED</th> <th>THU</th> <th>FRI</th> <th>SAT</th> </tr> </thead> <tbody class="sharkpicker-calendarBody"></tbody> </table> </div> <div class="sharkpicker-horizontal-line"></div>';
+		' <div class="sharkpicker-calendarContainer"> <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT DATE</p> <div class="sharkpicker-controls"> <div class="sharkpicker-arrow" onclick="changeMonth(this, -1)">&#10094;</div> <div class="sharkpicker-monthYearContainer"> <h2 class="sharkpicker-monthYear sharkpicker-month"></h2> <h2 class="sharkpicker-monthYear sharkpicker-year"></h2> </div> <div class="sharkpicker-arrow" onclick="changeMonth(this, 1)">&#10095;</div> </div> <div class="sharkpicker-yearpicker ' +
+		theme +
+		'" style="display: none;"> <div class="sharkpicker-yearpicker-controls"> <div class="sharkpicker-arrow" onclick="changeYearsRange(this, -1)">&#10094;</div> <h4 class="sharkpicker-decade-header" style="margin-top:4px;margin-bottom:4px;text-align:center;margin-left:14px; margin-right:14px;"></h4> <div class="sharkpicker-arrow" onclick="changeYearsRange(this, 1)">&#10095;</div> </div> <table style="width: 100%; text-align: center;"> <thead> <tr> <th> </th> <th> </th> <th></th> </tr> </thead> <div class="sharkpicker-vertical-line"></div> <tbody class="sharkpicker-yearpickerbody"> </tbody> </table> </div> <table class="sharkpicker-calendar"> <thead> <tr> <th>SUN</th> <th>MON</th> <th>TUE</th> <th>WED</th> <th>THU</th> <th>FRI</th> <th>SAT</th> </tr> </thead> <tbody class="sharkpicker-calendarBody"></tbody> </table> </div> <div class="sharkpicker-horizontal-line"></div>';
 
 	var clock =
 		' <input id="sharkpicker-input" type="hidden"> <p style="margin-top:2px; margin-left:2px;color:gray; font-weight:bold;font-size:9pt">SELECT TIME</p> <div class="am-pm-container-vertical"> <div class="hour-minute-block-horizontal"> <input class="hour-minute-input hour-minute-input-selected" id="sharkpicker-h" type="text" value="12"> <h1 class="hour-minute-separator">:</h1> <input class="hour-minute-input" id="sharkpicker-m" type="text" value="0"> </div> <div class="am-pm-block-vertical"> <div class="am am-vertical am-pm am-pm-selected" data-modifier="1">AM</div> <div class="sharkpicker-vertical-line"></div> <div class="pm pm-vertical am-pm" data-modifier="2">PM</div> </div> </div> <div class="clocks-container"> <div class="clock" data-type="hour"> <div class="dot"></div> <div class="hand"></div> <div class="number number-selected" data-value="12">12</div> <div class="number" data-value="1">1</div> <div class="number" data-value="2">2</div> <div class="number" data-value="3">3</div> <div class="number" data-value="4">4</div> <div class="number" data-value="5">5</div> <div class="number" data-value="6">6</div> <div class="number" data-value="7">7</div> <div class="number" data-value="8">8</div> <div class="number" data-value="9">9</div> <div class="number" data-value="10">10</div> <div class="number" data-value="11">11</div> </div> <div class="clock" data-type="minute" style="display:none;"> <div class="dot"></div> <div class="hand"></div> <div class="number number-selected" data-value="12">0</div> <div class="number" data-value="1">5</div> <div class="number" data-value="2">10</div> <div class="number" data-value="3">15</div> <div class="number" data-value="4">20</div> <div class="number" data-value="5">25</div> <div class="number" data-value="6">30</div> <div class="number" data-value="7">35</div> <div class="number" data-value="8">40</div> <div class="number" data-value="9">45</div> <div class="number" data-value="10">50</div> <div class="number" data-value="11">55</div> </div> </div> <div class="sharkpicker-actions"> <h4 class="sharkpicker-discard-btn sharkpicker-action-btn" style="margin-right:20px; margin-bottom: 10px;">Discard</h4> <h4 class="sharkpicker-save-btn sharkpicker-action-btn" style="margin-right:10px;margin-bottom: 10px;">Save</h4> </div> </div>';
@@ -49,6 +53,8 @@ $.fn.sharkPicker = function (options) {
 			sharkpickerContainer +
 			'"><div class="sharkpicker ' +
 			sharkpickerPopup +
+			" " +
+			theme +
 			'">' +
 			calendar +
 			"<div >" +
@@ -83,6 +89,7 @@ $.fn.sharkPicker = function (options) {
 			id: id,
 			element: $this,
 			sharkpickerContainer: container,
+			darkMode: options.darkMode,
 			calendarContainer: calendarContainer,
 			initialInput: initialInput,
 			input: input,
