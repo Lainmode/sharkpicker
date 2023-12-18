@@ -18,7 +18,8 @@
 
 .sharkpicker-dark {
   color: white;
-  background-color: black !important
+  background-color: black !important;
+  border: solid 1px rgb(63, 63, 63)
 }
 
 
