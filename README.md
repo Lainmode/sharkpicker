@@ -6,6 +6,7 @@
 
 ![image](https://github.com/Lainmode/sharkpicker/assets/44531827/373105e1-a8b5-4190-adb8-49edee804f31)
 ![image](https://github.com/Lainmode/sharkpicker/assets/44531827/18d30121-e3fa-4741-a128-9592354e5d3c)
+![image](https://github.com/Lainmode/sharkpicker/assets/44531827/25f46b37-9892-4eae-8b8a-36501eab79c2)
 
 
 
@@ -55,6 +56,7 @@ Note: SharkPicker initialization will wipe any elements inside the initializing 
 | format   | string | Optional | "DD/MM/YYYY HH:mm:ss"  | The DateTime format which will be used to format the final DateTime string that will be set to the input with the ID: **inputId**. It can be anything that is recognized by **moment.js** |
 | datetime   | string | Optional   | new Date()  |  The DateTime value in string. MUST comply with **format**. Breaks otherwise. |
 | showActionButtons    | boolean   | Optional | true   |   Whether the SharkPicker should render the default **Discard** and **Save** buttons. Read below to learn how to make your own. |
+| darkMode    | boolean   | Optional | false   |   Theme of the sharkpicker. |
 
 
 ### Functional Modification:</br>
