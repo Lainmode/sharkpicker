@@ -1,0 +1,682 @@
+.sharkpicker-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+
+
+  background-color: rgba(0, 0, 0, 0.5);
+
+}
+
+.sharkpicker-dark {
+  color: white;
+  background-color: black !important;
+  border: solid 1px rgb(63, 63, 63)
+}
+
+
+
+.sharkpicker {
+  height: fit-content;
+  display: flex;
+  justify-content: center;
+
+  background-color: white;
+}
+
+.sharkpicker-popup {
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  padding: 1em;
+}
+
+@media screen and (max-width: 900px) {
+  -container {
+    align-items: start;
+    padding-top: 0.6em;
+    padding-bottom: 0.6em;
+    margin-right: 0.6em;
+    margin-left: 0.6em;
+    height: fit-content;
+
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+
+
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  .sharkpicker {
+    height: fit-content;
+    display: block;
+  }
+
+  .sharkpicker-mobile-hidden {
+    display: none !important;
+  }
+
+  .sharkpicker-switch {
+    display: block !important;
+  }
+
+  .sharkpicker-pc-hidden {
+    display: flex !important;
+  }
+
+  .sharkpicker-actions-calendar {
+    display: flex !important;
+  }
+
+  .sharkpicker-yearpicker {
+    margin-left: 9em !important;
+  }
+
+}
+
+.sharkpicker-pc-hidden {
+  display: none;
+}
+
+
+.sharkpicker-switch {
+  display: none;
+}
+
+.sharkpicker-switch-btn {
+  margin-right: auto;
+}
+
+
+.sharkpicker-calendar {
+  font-family: Arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.sharkpicker-calendar-cell-content {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5em;
+  margin: 0px;
+  height: 1.8em;
+  width: 1.8em;
+
+  border-radius: 10px;
+  font-weight: bold;
+  color: rgb(63, 63, 63);
+
+  box-sizing: content-box;
+
+}
+
+.sharkpicker-dark .sharkpicker-calendar-cell-content {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.5em;
+  margin: 2px;
+  height: 1.8em;
+  width: 1.8em;
+
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+
+  box-sizing: content-box;
+
+}
+
+.sharkpicker-day {
+  text-align: center;
+  user-select: none;
+  cursor: pointer;
+}
+
+.sharkpicker-calendar td:hover .sharkpicker-calendar-cell-content {
+  background-color: #bdf4e5;
+}
+
+.sharkpicker-dark .sharkpicker-calendar td:hover .sharkpicker-calendar-cell-content {
+  background-color: #bdf4e5;
+  color: black;
+}
+
+.sharkpicker-calendar-cell-content-hover {
+  background-color: #bdf4e5;
+}
+
+.sharkpicker-dark .sharkpicker-calendar-cell-content-hover {
+  color: black;
+}
+
+.sharkpicker-calendar-cell-content-selected {
+  background-color: #20c697 !important;
+  color: white !important;
+  box-shadow: 0 0 0 0 !important;
+}
+
+.sharkpicker-calendar thead:after {
+  margin-bottom: 0.4em;
+}
+
+.sharkpicker-calendar th {
+  text-align: center;
+  padding: 0.5em;
+  margin: 0.5em;
+  height: 1.8em;
+  width: 1.8em;
+  font-weight: normal;
+  font-size: 0.8em;
+  border-bottom: 1px lightgray solid;
+
+}
+
+
+.sharkpicker-today {
+  box-shadow: 0 0 0 5px #bdf4e5 inset;
+}
+
+.sharkpicker-controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.sharkpicker-monthYearContainer {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.sharkpicker-month {
+  margin-left: 25%;
+}
+
+.sharkpicker-year {
+  margin-right: 25%;
+  background-color: #bdf4e5;
+
+  padding-left: 0.8em !important;
+  padding-right: 0.8em !important;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.sharkpicker-dark .sharkpicker-year {
+  color: black;
+}
+
+.sharkpicker-dark .sharkpicker-year-td:hover .sharkpicker-year-content {
+  color: black;
+}
+
+
+.sharkpicker-monthYear {
+  font-size: 1em;
+  text-align: center;
+  margin-bottom: 0.1em;
+  margin-top: 0.1em;
+  padding: 0.5em;
+  user-select: none;
+}
+
+.sharkpicker-yearpicker {
+  position: absolute;
+  background-color: white;
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  border-radius: 0.2em;
+  padding: 0.8em;
+  margin-left: 11em;
+  z-index: 999;
+}
+
+.sharkpicker-arrow {
+  user-select: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  padding-left: 1em;
+  padding-right: 1em;
+}
+
+.sharkpicker-year-content {
+  padding: 0.9em;
+  margin: 0.2em;
+  border-radius: 5px;
+
+}
+
+.sharkpicker-year-current {
+  box-shadow: 0 0 0 5px #bdf4e5 inset;
+}
+
+
+.sharkpicker-year-content-selected {
+  box-shadow: 0 0 0 0;
+  background-color: #20c697 !important;
+  color: white !important;
+}
+
+
+.sharkpicker-year-td {
+  user-select: none;
+  cursor: pointer;
+}
+
+.sharkpicker-year-td:hover .sharkpicker-year-content {
+  background-color: #bdf4e5;
+}
+
+
+.sharkpicker-yearpicker-controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.4em;
+}
+
+
+.clock {
+  position: relative;
+  width: 14.5em;
+  height: 14.5em;
+  border: 1px solid #bdf4e5;
+  border-radius: 50%;
+  margin: 4em;
+  text-align: center;
+  background-color: whitesmoke;
+}
+
+.sharkpicker-dark .clock {
+  color: white;
+  background-color: rgb(24, 24, 24) !important;
+  border: 1px solid gray;
+}
+
+
+.sharkpicker-dark .number:hover {
+  color: black !important;
+}
+
+.sharkpicker-dark .number-selected:hover {
+  color: white !important;
+}
+
+
+.clocks-container {
+  display: flex;
+  justify-content: center;
+}
+
+.sharkpicker-dark .hour-minute-input {
+  background-color: rgb(24, 24, 24) !important;
+  color: white;
+}
+
+.sharkpicker-dark .hour-minute-input-selected {
+  background-color: rgb(73, 73, 73) !important;
+  color: #20c697;
+}
+
+
+.hand {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 2px;
+  height: 35%;
+  background-color: #20c697;
+  transform-origin: 50% 100%;
+  transform: rotate(0deg);
+}
+
+.dot {
+  position: absolute;
+  left: 50%;
+  bottom: 50%;
+  width: 0.6em;
+  height: 0.6em;
+  background-color: #20c697;
+  border-radius: 50%;
+  transform: translate(-50%, 50%);
+}
+
+.am-pm-container-horizontal {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+.am-pm-block-horizontal {
+  border: 1px solid gray;
+  display: flex;
+  border-radius: 5px;
+}
+
+.am-pm-container-vertical {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  padding: 0.2em;
+}
+
+.am-pm-block-vertical {
+  border: 1px solid rgba(128, 128, 128, 0.7);
+  border-radius: 6px;
+  margin: 0.2em;
+  height: 100%;
+  margin-left: 25px;
+}
+
+.am-pm {
+  padding-right: 1em;
+  padding-left: 1em;
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+  background-color: white;
+  color: grey;
+  margin-bottom: 0;
+  margin-top: 0;
+  font-size: 1.2em;
+  user-select: none;
+  cursor: pointer;
+}
+
+.sharkpicker-dark .am-pm {
+
+  background-color: rgb(24, 24, 24);
+  color: white;
+
+}
+
+.sharkpicker-dark .am-pm-selected {
+
+  background-color: #20c697;
+  color: white;
+
+}
+
+.sharkpicker-horizontal-line {
+  border-left: 1px solid rgba(128, 128, 128, 0.7);
+  margin-left: 1em;
+  margin-right: 1em;
+  margin-top: 0.2em;
+  margin-bottom: 0.2em;
+}
+
+.sharkpicker-vertical-line {
+  border-top: 1px solid rgba(128, 128, 128, 0.7);
+}
+
+
+.am-horizontal {
+  border-start-start-radius: 5px;
+  border-end-start-radius: 5px;
+}
+
+.pm-horizontal {
+  border-end-end-radius: 5px;
+  border-start-end-radius: 5px;
+}
+
+.am-vertical {
+  border-start-start-radius: 5px;
+  border-start-end-radius: 5px;
+}
+
+.pm-vertical {
+  border-end-end-radius: 5px;
+  border-end-start-radius: 5px;
+}
+
+.am-pm-selected {
+  color: white;
+  background-color: #20c697;
+}
+
+.hour-minute-block-horizontal {
+  height: inherit;
+  display: flex;
+  justify-content: center;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.hour-minute-separator {
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.hour-minute-input {
+  height: 100%;
+  width: 3.5em;
+  font-size: 1.7em;
+  text-align: center;
+
+  border-radius: 5px;
+  border: 0;
+  background-color: whitesmoke;
+}
+
+
+.hour-minute-input-selected {
+  background-color: #bdf4e5;
+  color: #20c697;
+  outline: none;
+}
+
+
+.hour-minute-input:focus {
+  background-color: #bdf4e5;
+  color: #20c697;
+  outline: none;
+}
+
+
+
+.clock::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+}
+
+.clock-icon {
+  display: inline-block;
+  border: 2px solid #20c697;
+  border-radius: 50%;
+  width: 1.3em;
+  height: 1.3em;
+  position: relative;
+}
+
+.clock-icon:before {
+  content: '';
+  display: block;
+  width: 0.1em;
+  height: 0.4em;
+  background-color: #20c697;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.clock-icon:after {
+  content: '';
+  display: block;
+  width: 0.4em;
+  height: 0.1em;
+  background-color: #20c697;
+  position: absolute;
+  top: 50%;
+  left: 25%;
+}
+
+.calendar-icon {
+  display: inline-block;
+  border: 2px solid black;
+  width: 1em;
+  height: 0.8em;
+  position: relative;
+}
+
+.calendar-icon:before {
+  content: '';
+  display: block;
+  width: 0.8em;
+  height: 0.2em;
+  background-color: #20c697;
+  position: absolute;
+  top: 0;
+  left: 0.1em;
+}
+
+.calendar-icon:after {
+  content: '';
+  display: block;
+  width: 0.1em;
+  height: 0.1em;
+  background-color: #20c697;
+  position: absolute;
+  top: 0.15em;
+  right: 0.15em;
+}
+
+.number {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  width: 2em;
+  height: 2em;
+  border-radius: 50%;
+  top: 50%;
+  left: 50%;
+  margin-top: -1em;
+  /* Offset by half of height */
+  margin-left: -1em;
+  /* Offset by half of width */
+  font-size: 1.25em;
+  user-select: none;
+  cursor: pointer;
+
+  color: #20c697;
+}
+
+.number:hover {
+  background-color: #bdf4e5;
+}
+
+.number-selected {
+  background-color: #20c697 !important;
+  color: white;
+}
+
+.number[data-value="3"] {
+  transform: rotate(0deg) translateX(4.5em) rotate(0deg);
+}
+
+.number[data-value="4"] {
+  transform: rotate(30deg) translateX(4.5em) rotate(-30deg);
+}
+
+.number[data-value="5"] {
+  transform: rotate(60deg) translateX(4.5em) rotate(-60deg);
+}
+
+.number[data-value="6"] {
+  transform: rotate(90deg) translateX(4.5em) rotate(-90deg);
+}
+
+.number[data-value="7"] {
+  transform: rotate(120deg) translateX(4.5em) rotate(-120deg);
+}
+
+.number[data-value="8"] {
+  transform: rotate(150deg) translateX(4.5em) rotate(-150deg);
+}
+
+.number[data-value="9"] {
+  transform: rotate(180deg) translateX(4.5em) rotate(-180deg);
+}
+
+.number[data-value="10"] {
+  transform: rotate(210deg) translateX(4.5em) rotate(-210deg);
+}
+
+.number[data-value="11"] {
+  transform: rotate(240deg) translateX(4.5em) rotate(-240deg);
+}
+
+.number[data-value="12"] {
+  transform: rotate(270deg) translateX(4.5em) rotate(-270deg);
+}
+
+.number[data-value="1"] {
+  transform: rotate(300deg) translateX(4.5em) rotate(-300deg);
+}
+
+.number[data-value="2"] {
+  transform: rotate(330deg) translateX(4.5em) rotate(-330deg);
+}
+
+
+
+.sharkpicker-actions {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+}
+
+.sharkpicker-actions-calendar {
+  display: none;
+  justify-content: end;
+  align-items: center;
+}
+
+.sharkpicker-action-btn {
+  color: #20c697;
+  user-select: none;
+  cursor: pointer;
+  font-size: 1em !important;
+  margin-bottom: 0.5em;
+  margin-top: 0.5em;
+}
+
+.sharkpicker-discard-btn {
+  margin-right: 1.5em;
+
+}
+
+.sharkpicker-save-btn {
+  margin-right: 0.5em;
+
+}
+
+.sharkpicker-decade-header {
+  font-size: 0.8em !important;
+}
+
+.sharkpicker-container i {
+  color:#20c697;
+  border: 1px solid #20c697;
+}
